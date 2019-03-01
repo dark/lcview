@@ -25,14 +25,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        main.cpp \
-        lcview.cpp
+    src/lcview.cpp \
+    src/main.cpp
 
 HEADERS += \
-        lcview.h
+    src/lcview.h
 
 FORMS += \
-        lcview.ui
+    src/lcview.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
