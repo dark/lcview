@@ -46,6 +46,60 @@ const QStringList Portfolio::get_attribute_names() {
 }
 
 
+QStringList tokenize_line(QString line, char separator, char quote) {
+  QStringList tokens;
+  QString token;
+
+  enum class State {
+    INSIDE_TOKEN,
+    INSIDE_QUOTED_TOKEN,
+    CLOSING_QUOTED_TOKEN,
+  };
+
+  State state = State::INSIDE_TOKEN;
+  auto cursor = line.begin();
+  do {
+    switch (state) {
+      case State::INSIDE_TOKEN:
+        if (cursor == line.end() || *cursor == separator) {
+          tokens.append(token);
+          token.clear();
+        } else if (*cursor == quote) {
+          state = token.isEmpty()? State::INSIDE_QUOTED_TOKEN : state;
+          token.append(*cursor);
+        } else {
+          token.append(*cursor);
+        }
+        break;
+
+      case State::INSIDE_QUOTED_TOKEN:
+        if (cursor != line.end() && *cursor == quote)
+          state = State::CLOSING_QUOTED_TOKEN;
+
+        token.append(*cursor);
+        break;
+
+      case State::CLOSING_QUOTED_TOKEN:
+        if (cursor == line.end() || *cursor == separator) {
+          // Trim the first and last character (the quotes) first.
+          token = token.mid(1, token.size() - 2);
+          tokens.append(token);
+          token.clear();
+        } else {
+          token.append(*cursor);
+        }
+        state = State::INSIDE_TOKEN;
+        break;
+    }
+    if (cursor == line.end())
+      break;
+    ++cursor;
+  } while (true);
+
+  return tokens;
+}
+
+
 Portfolio* Portfolio::create_from_file(QString filename) {
   QFile inputFile(filename);
   if (!inputFile.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -70,7 +124,7 @@ Portfolio* Portfolio::create_from_file(QString filename) {
   while (!in.atEnd()) {
     ++lineno;
     QString line = in.readLine();
-    QStringList tokens = line.split(',', QString::KeepEmptyParts);
+    QStringList tokens = tokenize_line(line, ',', '"');
     if (tokens.size() != attribute_names.size()) {
       qWarning("Line %d has %d tokens, but %d were expected. Ignored.",
                lineno, tokens.size(), attribute_names.size());
