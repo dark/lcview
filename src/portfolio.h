@@ -22,6 +22,7 @@
 #include <QStringList>
 #include <QVector>
 
+#include "filter.h"
 #include "note.h"
 
 class Portfolio {
@@ -35,6 +36,8 @@ public:
   const QStringList get_attribute_names();
 
   static Portfolio* create_from_file(QString filename);
+
+  Portfolio* filter(QList<Filter> filters);
 
 private:
   QStringList attribute_names_;
