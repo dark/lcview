@@ -26,10 +26,14 @@ CONFIG += c++11
 
 SOURCES += \
     src/lcview.cpp \
-    src/main.cpp
+    src/main.cpp \
+    src/note.cpp \
+    src/portfolio.cpp
 
 HEADERS += \
-    src/lcview.h
+    src/lcview.h \
+    src/note.h \
+    src/portfolio.h
 
 FORMS += \
     src/lcview.ui
