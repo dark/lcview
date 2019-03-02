@@ -28,13 +28,15 @@ SOURCES += \
     src/lcview.cpp \
     src/main.cpp \
     src/note.cpp \
-    src/portfolio.cpp
+    src/portfolio.cpp \
+    src/filter.cpp
 
 HEADERS += \
     src/lcview.h \
     src/note.h \
     src/portfolio.h \
-    src/attributes.h
+    src/attributes.h \
+    src/filter.h
 
 FORMS += \
     src/lcview.ui
