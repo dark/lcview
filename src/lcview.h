@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef LCVIEW_H
-#define LCVIEW_H
+#pragma once
 
 #include <QMainWindow>
 
@@ -36,5 +35,3 @@ public:
 private:
   Ui::LCView *ui;
 };
-
-#endif // LCVIEW_H
