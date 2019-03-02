@@ -35,3 +35,16 @@ QString Note::get_attribute(QString key) {
   return attributes_.value(key);
 }
 
+
+// Specific getters
+QString Note::get_grade() {
+  return get_attribute(NOTE_KEY_GRADE);
+}
+
+int Note::get_term() {
+  return get_attribute(NOTE_KEY_TERM).toInt();
+}
+
+Attributes::NoteStatus Note::get_status() {
+  return Attributes::string_to_status(get_attribute(NOTE_KEY_STATUS));
+}

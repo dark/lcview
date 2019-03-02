@@ -33,7 +33,8 @@ SOURCES += \
 HEADERS += \
     src/lcview.h \
     src/note.h \
-    src/portfolio.h
+    src/portfolio.h \
+    src/attributes.h
 
 FORMS += \
     src/lcview.ui
