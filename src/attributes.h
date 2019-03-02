@@ -53,6 +53,7 @@ inline QString field_key(NoteField field) {
     case NoteField::LOAN_ISSUE_DATE:
       return NOTE_KEY_LOAN_ISSUE_DATE;
   }
+  return "<key-error>";
 }
 
 inline int parse_term(QString s) {
@@ -98,7 +99,7 @@ inline NoteStatus parse_status(QString s) {
 inline QString status_to_string(NoteStatus status) {
   switch (status) {
     case NoteStatus::UNKNOWN:
-      return "<unknown>";
+      return "<unknown-status>";
     case NoteStatus::CHARGED_OFF:
       return "Charged Off";
     case NoteStatus::CURRENT:
@@ -115,8 +116,8 @@ inline QString status_to_string(NoteStatus status) {
       return "Late (16-30 days)";
     case NoteStatus::LATE_31_120:
       return "Late (31-120 days)";
-    }
-  return "<error>";
+  }
+  return "<status-error>";
 }
 
 inline QDate parse_loan_issue_date(QString s) {
