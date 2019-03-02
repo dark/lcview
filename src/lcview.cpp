@@ -17,16 +17,51 @@
  */
 
 #include "lcview.h"
+
+#include <QFileDialog>
+#include <QMessageBox>
 #include "ui_lcview.h"
+
 
 LCView::LCView(QWidget *parent) :
   QMainWindow(parent),
-  ui(new Ui::LCView)
+  ui_(new Ui::LCView),
+  portfolio_(nullptr)
 {
-  ui->setupUi(this);
+  ui_->setupUi(this);
 }
 
 LCView::~LCView()
 {
-  delete ui;
+  delete portfolio_;
+  portfolio_ = nullptr;
+  delete ui_;
+  ui_ = nullptr;
+}
+
+void LCView::load_portfolio_from_file()
+{
+  QString filename = QFileDialog::getOpenFileName(this, "Open the file");
+  if (filename.isEmpty()) {
+    qInfo("User aborted portfolio load");
+    return;
+  }
+
+  Portfolio *p = Portfolio::create_from_file(filename);
+  if (p) {
+    delete portfolio_;
+    portfolio_ = p;
+  } else {
+    QMessageBox::warning(this, "Warning", "Failed to load portfolio from file: " + filename);
+  }
+}
+
+void LCView::on_actionExit_triggered()
+{
+  QCoreApplication::quit();
+}
+
+void LCView::on_actionLoad_triggered()
+{
+  LCView::load_portfolio_from_file();
 }

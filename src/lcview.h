@@ -20,6 +20,8 @@
 
 #include <QMainWindow>
 
+#include "portfolio.h"
+
 namespace Ui {
 class LCView;
 }
@@ -32,6 +34,14 @@ public:
   explicit LCView(QWidget *parent = nullptr);
   ~LCView();
 
+private slots:
+  void on_actionExit_triggered();
+
+  void on_actionLoad_triggered();
+
 private:
-  Ui::LCView *ui;
+  Ui::LCView *ui_;
+  Portfolio *portfolio_;
+
+  void load_portfolio_from_file();
 };

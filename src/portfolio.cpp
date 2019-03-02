@@ -59,7 +59,7 @@ Portfolio* Portfolio::create_from_file(QString filename) {
   }
 
   QStringList attribute_names = attributes.split(',', QString::KeepEmptyParts);
-  if (attribute_names.isEmpty()) {
+  if (attribute_names.size() < 2) {
     qWarning() << "Empty list of attributes from file:" << filename;
     return nullptr;
   }
@@ -73,7 +73,7 @@ Portfolio* Portfolio::create_from_file(QString filename) {
     QStringList tokens = line.split(',', QString::KeepEmptyParts);
     if (tokens.size() != attribute_names.size()) {
       qWarning("Line %d has %d tokens, but %d were expected. Ignored.",
-               lineno, tokens.size(), attributes.size());
+               lineno, tokens.size(), attribute_names.size());
       continue;
     }
 
@@ -89,6 +89,8 @@ Portfolio* Portfolio::create_from_file(QString filename) {
   }
   inputFile.close();
 
+  qInfo() << "Loaded" << p->notes_.size() << "notes from file:" << filename
+          << "(skipped" << (lineno - p->notes_.size() - 1) << "lines)";
   return p;
 }
 
