@@ -41,7 +41,7 @@ LCView::~LCView()
 
 void LCView::load_portfolio_from_file()
 {
-  QString filename = QFileDialog::getOpenFileName(this, "Open the file");
+  QString filename = QFileDialog::getOpenFileName(this, "Open portfolio file");
   if (filename.isEmpty()) {
     qInfo("User aborted portfolio load");
     return;
@@ -52,7 +52,7 @@ void LCView::load_portfolio_from_file()
     delete portfolio_;
     portfolio_ = p;
   } else {
-    QMessageBox::warning(this, "Warning", "Failed to load portfolio from file: " + filename);
+    QMessageBox::warning(this, "Failed to load portfolio", "Failed to load portfolio from file: " + filename);
   }
 }
 
