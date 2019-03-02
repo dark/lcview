@@ -28,15 +28,15 @@ class Note {
 public:
   Note();
   bool add_attribute(QString key, QString value);
-  QString get_attribute(QString key);
+  QString get_attribute(QString key) const;
 
   // Specific getters
-  QString get_interest_rate();
-  QString get_grade();
-  int get_term();
-  Attributes::NoteStatus get_status();
-  QString get_address_state();
-  QDate get_loan_issue_date();
+  QString get_interest_rate() const;
+  QString get_grade() const;
+  int get_term() const;
+  Attributes::NoteStatus get_status() const;
+  QString get_address_state() const;
+  QDate get_loan_issue_date() const;
 
 private:
   QMap<QString, QString> attributes_;

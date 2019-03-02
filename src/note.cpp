@@ -31,32 +31,32 @@ bool Note::add_attribute(QString key, QString value)
 }
 
 
-QString Note::get_attribute(QString key) {
+QString Note::get_attribute(QString key) const {
   return attributes_.value(key);
 }
 
 
 // Specific getters
-QString Note::get_interest_rate() {
+QString Note::get_interest_rate() const {
   return get_attribute(Attributes::field_key(Attributes::NoteField::INTEREST));
 }
 
-QString Note::get_grade() {
+QString Note::get_grade() const {
   return get_attribute(Attributes::field_key(Attributes::NoteField::GRADE));
 }
 
-int Note::get_term() {
+int Note::get_term() const {
   return Attributes::parse_term(get_attribute(Attributes::field_key(Attributes::NoteField::TERM)));
 }
 
-Attributes::NoteStatus Note::get_status() {
+Attributes::NoteStatus Note::get_status() const {
   return Attributes::parse_status(get_attribute(Attributes::field_key(Attributes::NoteField::STATUS)));
 }
 
-QString Note::get_address_state() {
+QString Note::get_address_state() const {
   return get_attribute(Attributes::field_key(Attributes::NoteField::ADDRESS_STATE));
 }
 
-QDate Note::get_loan_issue_date() {
+QDate Note::get_loan_issue_date() const {
   return Attributes::parse_loan_issue_date(get_attribute(Attributes::field_key(Attributes::NoteField::LOAN_ISSUE_DATE)));
 }
