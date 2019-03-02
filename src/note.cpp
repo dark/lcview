@@ -37,14 +37,26 @@ QString Note::get_attribute(QString key) {
 
 
 // Specific getters
+QString Note::get_interest_rate() {
+  return get_attribute(NOTE_KEY_INTEREST);
+}
+
 QString Note::get_grade() {
   return get_attribute(NOTE_KEY_GRADE);
 }
 
 int Note::get_term() {
-  return get_attribute(NOTE_KEY_TERM).toInt();
+  return Attributes::parse_term(get_attribute(NOTE_KEY_TERM));
 }
 
 Attributes::NoteStatus Note::get_status() {
-  return Attributes::string_to_status(get_attribute(NOTE_KEY_STATUS));
+  return Attributes::parse_status(get_attribute(NOTE_KEY_STATUS));
+}
+
+QString Note::get_address_state() {
+  return get_attribute(NOTE_KEY_ADDRESS_STATE);
+}
+
+QDate Note::get_loan_issue_date() {
+  return Attributes::parse_loan_issue_date(get_attribute(NOTE_KEY_LOAN_ISSUE_DATE));
 }

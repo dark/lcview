@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include <QDate>
 #include <QMap>
 #include <QString>
 
@@ -30,9 +31,12 @@ public:
   QString get_attribute(QString key);
 
   // Specific getters
+  QString get_interest_rate();
   QString get_grade();
   int get_term();
   Attributes::NoteStatus get_status();
+  QString get_address_state();
+  QDate get_loan_issue_date();
 
 private:
   QMap<QString, QString> attributes_;
