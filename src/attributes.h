@@ -29,6 +29,32 @@
 #define NOTE_KEY_LOAN_ISSUE_DATE "Loan Issue Date"
 
 namespace Attributes {
+enum class NoteField {
+  INTEREST,
+  GRADE,
+  TERM,
+  STATUS,
+  ADDRESS_STATE,
+  LOAN_ISSUE_DATE
+};
+
+inline QString field_key(NoteField field) {
+  switch (field) {
+    case NoteField::INTEREST:
+      return NOTE_KEY_INTEREST;
+    case NoteField::GRADE:
+      return NOTE_KEY_GRADE;
+    case NoteField::TERM:
+      return NOTE_KEY_TERM;
+    case NoteField::STATUS:
+      return NOTE_KEY_STATUS;
+    case NoteField::ADDRESS_STATE:
+      return NOTE_KEY_ADDRESS_STATE;
+    case NoteField::LOAN_ISSUE_DATE:
+      return NOTE_KEY_LOAN_ISSUE_DATE;
+  }
+}
+
 inline int parse_term(QString s) {
   return s.toInt();
 }
