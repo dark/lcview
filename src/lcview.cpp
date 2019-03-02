@@ -23,24 +23,21 @@
 #include "ui_lcview.h"
 
 
-LCView::LCView(QWidget *parent) :
-  QMainWindow(parent),
-  ui_(new Ui::LCView),
-  portfolio_(nullptr)
-{
+LCView::LCView(QWidget *parent)
+  : QMainWindow(parent),
+    ui_(new Ui::LCView),
+    portfolio_(nullptr) {
   ui_->setupUi(this);
 }
 
-LCView::~LCView()
-{
+LCView::~LCView() {
   delete portfolio_;
   portfolio_ = nullptr;
   delete ui_;
   ui_ = nullptr;
 }
 
-void LCView::load_portfolio_from_file()
-{
+void LCView::load_portfolio_from_file() {
   QString filename = QFileDialog::getOpenFileName(this, "Open portfolio file");
   if (filename.isEmpty()) {
     qInfo("User aborted portfolio load");
@@ -56,12 +53,10 @@ void LCView::load_portfolio_from_file()
   }
 }
 
-void LCView::on_actionExit_triggered()
-{
+void LCView::on_actionExit_triggered() {
   QCoreApplication::quit();
 }
 
-void LCView::on_actionLoad_triggered()
-{
+void LCView::on_actionLoad_triggered() {
   LCView::load_portfolio_from_file();
 }
