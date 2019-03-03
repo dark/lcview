@@ -16,33 +16,12 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "charts.h"
 
-#include <QMainWindow>
+Charts::Charts() {
 
-#include "portfolio.h"
-
-namespace Ui {
-class LCView;
 }
 
-class LCView : public QMainWindow
-{
-  Q_OBJECT
-
-public:
-  explicit LCView(QWidget *parent = nullptr);
-  ~LCView();
-
-private slots:
-  void on_actionExit_triggered();
-
-  void on_actionLoad_triggered();
-
-private:
-  Ui::LCView *ui_;
-  Portfolio *portfolio_;
-
-  void load_portfolio_from_file();
-  void refresh_charts();
-};
+QtCharts::QChart *Charts::grade_distribution(Portfolio *p) {
+  return nullptr;
+}

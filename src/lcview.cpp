@@ -20,6 +20,9 @@
 
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QtCharts/QChartView>
+
+#include "charts.h"
 #include "ui_lcview.h"
 
 
@@ -31,8 +34,11 @@ LCView::LCView(QWidget *parent)
 }
 
 LCView::~LCView() {
-  delete portfolio_;
+  Portfolio *portfolio = portfolio_;
   portfolio_ = nullptr;
+  refresh_charts();
+  delete portfolio;
+
   delete ui_;
   ui_ = nullptr;
 }
@@ -46,8 +52,10 @@ void LCView::load_portfolio_from_file() {
 
   Portfolio *p = Portfolio::create_from_file(filename);
   if (p) {
-    delete portfolio_;
+    Portfolio *old_portfolio = portfolio_;
     portfolio_ = p;
+    refresh_charts();
+    delete old_portfolio;
   } else {
     QMessageBox::warning(this, "Failed to load portfolio", "Failed to load portfolio from file: " + filename);
   }
@@ -59,4 +67,17 @@ void LCView::on_actionExit_triggered() {
 
 void LCView::on_actionLoad_triggered() {
   LCView::load_portfolio_from_file();
+}
+
+void LCView::refresh_charts() {
+  QtCharts::QChart *chart = portfolio_ ? Charts::grade_distribution(portfolio_) : nullptr;
+
+  if (chart) {
+    QtCharts::QChartView *chartView = new QtCharts::QChartView(chart);
+    chartView->setRenderHint(QPainter::Antialiasing);
+    this->setCentralWidget(chartView);
+  } else {
+    qWarning("Resetting central widget to nullptr");
+    this->setCentralWidget(nullptr);
+  }
 }

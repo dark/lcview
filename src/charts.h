@@ -18,31 +18,13 @@
 
 #pragma once
 
-#include <QMainWindow>
+#include <QChart>
 
 #include "portfolio.h"
 
-namespace Ui {
-class LCView;
-}
-
-class LCView : public QMainWindow
-{
-  Q_OBJECT
-
+class Charts {
 public:
-  explicit LCView(QWidget *parent = nullptr);
-  ~LCView();
+  Charts();
 
-private slots:
-  void on_actionExit_triggered();
-
-  void on_actionLoad_triggered();
-
-private:
-  Ui::LCView *ui_;
-  Portfolio *portfolio_;
-
-  void load_portfolio_from_file();
-  void refresh_charts();
+  static QtCharts::QChart* grade_distribution(Portfolio *p);
 };
