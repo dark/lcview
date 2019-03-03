@@ -123,4 +123,5 @@ inline QString status_to_string(NoteStatus status) {
 inline QDate parse_loan_issue_date(QString s) {
   return QDate::fromString(s, "MM/dd/yyyy");
 }
-};
+
+}; // namespace Attributes

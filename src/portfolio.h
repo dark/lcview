@@ -37,6 +37,7 @@ public:
 
   static Portfolio* create_from_file(QString filename);
 
+  // Apply a list of filters to the current portfolio, to generate a new one.
   Portfolio* filter(QList<Filter> filters);
 
 private:
