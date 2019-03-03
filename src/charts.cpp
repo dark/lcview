@@ -22,8 +22,19 @@
 
 #include "aggregator.h"
 
+namespace Charts {
 
-QtCharts::QChart *Charts::grade_distribution(Portfolio *p) {
+static const QMap<QString, QColor> grade_colors = {
+  {"A", QColor(82, 120, 165)},
+  {"B", QColor(110, 198, 226)},
+  {"C", QColor(90, 163, 53)},
+  {"D", QColor(137, 197, 64)},
+  {"E", QColor(234, 226, 0)},
+  {"F", QColor(255, 202, 44)},
+  {"G", QColor(247, 149, 30)},
+};
+
+QtCharts::QChart* grade_distribution(Portfolio *p) {
   QMap<QString, int> grades = Aggregator::grades(p, true);
 
   QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
@@ -31,11 +42,22 @@ QtCharts::QChart *Charts::grade_distribution(Portfolio *p) {
     series->append(grade.first, grade.second);
   series->setLabelsVisible(true);
 
+  // Apply colors similar to those from the official website
+  for (auto slice: series->slices()) {
+    // Use the first char only to determine grade and color
+    QString label = slice->label().at(0);
+    QMap<QString, QColor>::const_iterator color = grade_colors.find(label);
+    if (color != grade_colors.end())
+      slice->setBrush(color.value());
+  }
+
   QtCharts::QChart *chart = new QtCharts::QChart();
   chart->addSeries(series);
-  chart->setTitle("Node grade distribution");
+  chart->setTitle("<h1>Node grade distribution</h1>");
   chart->legend()->hide();
   chart->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
 
   return chart;
 }
+
+} // namespace Charts
