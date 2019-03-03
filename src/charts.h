@@ -22,8 +22,15 @@
 
 #include "portfolio.h"
 
+class Chart {
+public:
+  Chart();
+  virtual ~Chart();
+  virtual QWidget* widget() = 0;
+};
+
 namespace Charts {
 
-QWidget* grade_distribution(Portfolio *p);
+Chart* grade_distribution(Portfolio *p);
 
 }; // namespace Charts

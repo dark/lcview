@@ -21,18 +21,22 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-#include "charts.h"
 #include "ui_lcview.h"
 
 
 LCView::LCView(QWidget *parent)
   : QMainWindow(parent),
     ui_(new Ui::LCView),
-    portfolio_(nullptr) {
+    portfolio_(nullptr),
+    chart_(nullptr) {
   ui_->setupUi(this);
 }
 
 LCView::~LCView() {
+  Chart *chart = chart_;
+  chart_ = nullptr;
+  delete chart;
+
   Portfolio *portfolio = portfolio_;
   portfolio_ = nullptr;
   refresh_charts();
@@ -69,9 +73,19 @@ void LCView::on_actionLoad_triggered() {
 }
 
 void LCView::refresh_charts() {
-  QWidget *widget = portfolio_ ? Charts::grade_distribution(portfolio_) : nullptr;
+  if (!portfolio_) {
+    qWarning("Resetting central widget to nullptr because portfolio is empty");
+    this->setCentralWidget(nullptr);
+    return;
+  }
 
-  if (!widget)
-    qWarning("Resetting central widget to nullptr");
-  this->setCentralWidget(widget);
+  Chart *chart = Charts::grade_distribution(portfolio_);
+  if (!chart) {
+    qWarning("Nothing to do with a null chart");
+    return;
+  }
+  delete chart_;
+  chart_ = chart;
+
+  this->setCentralWidget(chart->widget());
 }

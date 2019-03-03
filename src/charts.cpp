@@ -24,10 +24,31 @@
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QFormLayout>
 
-
 #include "aggregator.h"
 
+Chart::Chart() {}
+Chart::~Chart() {}
+
 namespace Charts {
+
+class GradeChart : public Chart {
+public:
+  GradeChart(Portfolio *portfolio, QWidget *widget);
+  virtual ~GradeChart();
+  virtual QWidget* widget() { return widget_; }
+
+private:
+  Portfolio *portfolio_;
+  QWidget *widget_;
+};
+
+GradeChart::GradeChart(Portfolio *portfolio, QWidget *widget)
+  : portfolio_(portfolio), widget_(widget) {}
+
+GradeChart::~GradeChart() {
+  // none of the pointers is owned by this class
+}
+
 
 static const QMap<QString, QColor> grade_colors = {
   {"A", QColor(82, 120, 165)},
@@ -39,8 +60,8 @@ static const QMap<QString, QColor> grade_colors = {
   {"G", QColor(247, 149, 30)},
 };
 
-QWidget* grade_distribution(Portfolio *p) {
-  QMap<QString, int> grades = Aggregator::grades(p, true);
+Chart* grade_distribution(Portfolio *portfolio) {
+  QMap<QString, int> grades = Aggregator::grades(portfolio, true);
 
   QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
   for (auto grade: grades.toStdMap())
@@ -77,7 +98,7 @@ QWidget* grade_distribution(Portfolio *p) {
   QWidget *mainWidget = new QWidget();
   mainWidget->setLayout(mainLayout);
 
-  return mainWidget;
+  return new GradeChart(portfolio, mainWidget);
 }
 
 } // namespace Charts

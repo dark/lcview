@@ -20,6 +20,7 @@
 
 #include <QMainWindow>
 
+#include "charts.h"
 #include "portfolio.h"
 
 namespace Ui {
@@ -42,6 +43,7 @@ private slots:
 private:
   Ui::LCView *ui_;
   Portfolio *portfolio_;
+  Chart *chart_;
 
   void load_portfolio_from_file();
   void refresh_charts();
