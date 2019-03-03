@@ -22,10 +22,8 @@
 
 #include "portfolio.h"
 
-class Charts {
-public:
-  static QtCharts::QChart* grade_distribution(Portfolio *p);
+namespace Charts {
 
-private:
-  Charts();
-};
+QtCharts::QChart* grade_distribution(Portfolio *p);
+
+}; // namespace Charts

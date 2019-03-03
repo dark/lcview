@@ -23,8 +23,6 @@
 #include "aggregator.h"
 
 
-Charts::Charts() {}
-
 QtCharts::QChart *Charts::grade_distribution(Portfolio *p) {
   QMap<QString, int> grades = Aggregator::grades(p, true);
 
