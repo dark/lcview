@@ -20,7 +20,6 @@
 
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QtCharts/QChartView>
 
 #include "charts.h"
 #include "ui_lcview.h"
@@ -70,14 +69,9 @@ void LCView::on_actionLoad_triggered() {
 }
 
 void LCView::refresh_charts() {
-  QtCharts::QChart *chart = portfolio_ ? Charts::grade_distribution(portfolio_) : nullptr;
+  QWidget *widget = portfolio_ ? Charts::grade_distribution(portfolio_) : nullptr;
 
-  if (chart) {
-    QtCharts::QChartView *chartView = new QtCharts::QChartView(chart);
-    chartView->setRenderHint(QPainter::Antialiasing);
-    this->setCentralWidget(chartView);
-  } else {
+  if (!widget)
     qWarning("Resetting central widget to nullptr");
-    this->setCentralWidget(nullptr);
-  }
+  this->setCentralWidget(widget);
 }

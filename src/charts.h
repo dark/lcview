@@ -18,12 +18,12 @@
 
 #pragma once
 
-#include <QChart>
+#include <QWidget>
 
 #include "portfolio.h"
 
 namespace Charts {
 
-QtCharts::QChart* grade_distribution(Portfolio *p);
+QWidget* grade_distribution(Portfolio *p);
 
 }; // namespace Charts

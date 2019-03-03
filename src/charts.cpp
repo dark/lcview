@@ -19,6 +19,7 @@
 #include "charts.h"
 
 #include <QPieSeries>
+#include <QtCharts/QChartView>
 
 #include "aggregator.h"
 
@@ -34,7 +35,7 @@ static const QMap<QString, QColor> grade_colors = {
   {"G", QColor(247, 149, 30)},
 };
 
-QtCharts::QChart* grade_distribution(Portfolio *p) {
+QWidget* grade_distribution(Portfolio *p) {
   QMap<QString, int> grades = Aggregator::grades(p, true);
 
   QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
@@ -57,7 +58,10 @@ QtCharts::QChart* grade_distribution(Portfolio *p) {
   chart->legend()->hide();
   chart->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
 
-  return chart;
+  QtCharts::QChartView *chartView = new QtCharts::QChartView(chart);
+  chartView->setRenderHint(QPainter::Antialiasing);
+
+  return chartView;
 }
 
 } // namespace Charts
