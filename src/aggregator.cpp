@@ -16,16 +16,28 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "aggregator.h"
 
-#include <QChart>
 
-#include "portfolio.h"
+QMap<QString, int> Aggregator::grades(Portfolio *p, bool coarse) {
+  QMap<QString, int> grades;
+  if (!p)
+    return grades;
 
-class Charts {
-public:
-  static QtCharts::QChart* grade_distribution(Portfolio *p);
+  for (auto note = p->begin(); note != p->end(); ++note) {
+    QString grade = note->get_grade();
+    ++grades[grade];
+  }
 
-private:
-  Charts();
-};
+  if (!coarse)
+    // Return grades without further processing.
+    return grades;
+
+  // Reduce grades to a coarser aggregation.
+  QMap<QString, int> coarse_grades;
+  for (const auto &grade: grades.toStdMap()) {
+    QString coarse = grade.first.at(0);
+    coarse_grades[coarse] += grade.second;
+  }
+  return coarse_grades;
+}

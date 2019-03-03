@@ -18,10 +18,26 @@
 
 #include "charts.h"
 
-Charts::Charts() {
+#include <QPieSeries>
 
-}
+#include "aggregator.h"
+
+
+Charts::Charts() {}
 
 QtCharts::QChart *Charts::grade_distribution(Portfolio *p) {
-  return nullptr;
+  QMap<QString, int> grades = Aggregator::grades(p, true);
+
+  QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
+  for (auto grade: grades.toStdMap())
+    series->append(grade.first, grade.second);
+  series->setLabelsVisible(true);
+
+  QtCharts::QChart *chart = new QtCharts::QChart();
+  chart->addSeries(series);
+  chart->setTitle("Node grade distribution");
+  chart->legend()->hide();
+  chart->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
+
+  return chart;
 }

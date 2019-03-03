@@ -30,7 +30,8 @@ SOURCES += \
     src/note.cpp \
     src/portfolio.cpp \
     src/filter.cpp \
-    src/charts.cpp
+    src/charts.cpp \
+    src/aggregator.cpp
 
 HEADERS += \
     src/lcview.h \
@@ -38,7 +39,8 @@ HEADERS += \
     src/portfolio.h \
     src/attributes.h \
     src/filter.h \
-    src/charts.h
+    src/charts.h \
+    src/aggregator.h
 
 FORMS += \
     src/lcview.ui

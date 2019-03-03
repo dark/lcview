@@ -18,14 +18,12 @@
 
 #pragma once
 
-#include <QChart>
-
+#include <QMap>
+#include <QString>
 #include "portfolio.h"
 
-class Charts {
-public:
-  static QtCharts::QChart* grade_distribution(Portfolio *p);
+namespace Aggregator {
 
-private:
-  Charts();
-};
+QMap<QString, int> grades(Portfolio *p, bool coarse = false);
+
+}; // namespace Aggregator
