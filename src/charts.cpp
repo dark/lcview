@@ -19,7 +19,11 @@
 #include "charts.h"
 
 #include <QPieSeries>
+#include <QVBoxLayout>
 #include <QtCharts/QChartView>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QFormLayout>
+
 
 #include "aggregator.h"
 
@@ -61,7 +65,19 @@ QWidget* grade_distribution(Portfolio *p) {
   QtCharts::QChartView *chartView = new QtCharts::QChartView(chart);
   chartView->setRenderHint(QPainter::Antialiasing);
 
-  return chartView;
+  // Buttons to make the chart interactive
+  QCheckBox *checkbox = new QCheckBox();
+  QFormLayout *chartSettingsLayout = new QFormLayout();
+  chartSettingsLayout->addRow("Coarse", checkbox);
+
+  // Add wrapper layout to put everything together
+  QVBoxLayout *mainLayout = new QVBoxLayout();
+  mainLayout->addLayout(chartSettingsLayout);
+  mainLayout->addWidget(chartView);
+  QWidget *mainWidget = new QWidget();
+  mainWidget->setLayout(mainLayout);
+
+  return mainWidget;
 }
 
 } // namespace Charts
