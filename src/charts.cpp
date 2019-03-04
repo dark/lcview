@@ -60,8 +60,8 @@ GradeChart::GradeChart(Portfolio *portfolio)
   coarse_checkbox_->setChecked(true);
   QFormLayout *chartSettingsLayout = new QFormLayout();
   chartSettingsLayout->addRow("Coarse", coarse_checkbox_);
-  QObject::connect(coarse_checkbox_, &QCheckBox::toggled,
-                   this, &GradeChart::on_coarse_button_clicked);
+  QObject::connect(coarse_checkbox_, SIGNAL(toggled(bool)),
+                   this, SLOT(on_coarse_button_toggled(bool)));
 
   // Add wrapper layout to put everything together
   QVBoxLayout *mainLayout = new QVBoxLayout();
@@ -79,9 +79,9 @@ GradeChart::~GradeChart() {
 }
 
 
-void GradeChart::on_coarse_button_clicked() {
+void GradeChart::on_coarse_button_toggled(bool checked) {
   // Regen the series and re-apply it
-  QtCharts::QPieSeries *series = GradeChart::create_series(portfolio_, coarse_checkbox_->isChecked());
+  QtCharts::QPieSeries *series = GradeChart::create_series(portfolio_, checked);
 
   chart_->removeAllSeries();
   chart_->addSeries(series);

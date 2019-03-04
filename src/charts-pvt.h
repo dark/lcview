@@ -35,7 +35,7 @@ public:
   virtual QWidget* widget() { return widget_; }
 
 private slots:
-  void on_coarse_button_clicked();
+  void on_coarse_button_toggled(bool checked);
 
 private:
   static const QMap<QString, QColor> grade_colors_;
