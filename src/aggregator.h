@@ -24,6 +24,6 @@
 
 namespace Aggregator {
 
-QMap<QString, int> grades(Portfolio *p, bool coarse = false);
+QMap<QString, int> grades(Portfolio *p, bool coarse);
 
 }; // namespace Aggregator

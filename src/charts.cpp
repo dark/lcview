@@ -33,24 +33,19 @@ namespace Charts {
 
 class GradeChart : public Chart {
 public:
-  GradeChart(Portfolio *portfolio, QWidget *widget);
+  explicit GradeChart(Portfolio *portfolio);
   virtual ~GradeChart();
   virtual QWidget* widget() { return widget_; }
 
 private:
+  static const QMap<QString, QColor> grade_colors_;
   Portfolio *portfolio_;
   QWidget *widget_;
+
+  static QtCharts::QPieSeries* create_series(Portfolio *portfolio, bool coarse);
 };
 
-GradeChart::GradeChart(Portfolio *portfolio, QWidget *widget)
-  : portfolio_(portfolio), widget_(widget) {}
-
-GradeChart::~GradeChart() {
-  // none of the pointers is owned by this class
-}
-
-
-static const QMap<QString, QColor> grade_colors = {
+const QMap<QString, QColor> GradeChart::grade_colors_ = {
   {"A", QColor(82, 120, 165)},
   {"B", QColor(110, 198, 226)},
   {"C", QColor(90, 163, 53)},
@@ -60,22 +55,9 @@ static const QMap<QString, QColor> grade_colors = {
   {"G", QColor(247, 149, 30)},
 };
 
-Chart* grade_distribution(Portfolio *portfolio) {
-  QMap<QString, int> grades = Aggregator::grades(portfolio, true);
-
-  QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
-  for (auto grade: grades.toStdMap())
-    series->append(grade.first, grade.second);
-  series->setLabelsVisible(true);
-
-  // Apply colors similar to those from the official website
-  for (auto slice: series->slices()) {
-    // Use the first char only to determine grade and color
-    QString label = slice->label().at(0);
-    QMap<QString, QColor>::const_iterator color = grade_colors.find(label);
-    if (color != grade_colors.end())
-      slice->setBrush(color.value());
-  }
+GradeChart::GradeChart(Portfolio *portfolio)
+  : portfolio_(portfolio) {
+  QtCharts::QPieSeries *series = create_series(portfolio_, true);
 
   QtCharts::QChart *chart = new QtCharts::QChart();
   chart->addSeries(series);
@@ -98,7 +80,39 @@ Chart* grade_distribution(Portfolio *portfolio) {
   QWidget *mainWidget = new QWidget();
   mainWidget->setLayout(mainLayout);
 
-  return new GradeChart(portfolio, mainWidget);
+  widget_ = mainWidget;
+}
+
+
+GradeChart::~GradeChart() {
+  // none of the pointers is owned by this class
+}
+
+
+QtCharts::QPieSeries* GradeChart::create_series(Portfolio *portfolio, bool coarse) {
+  QMap<QString, int> grades = Aggregator::grades(portfolio, coarse);
+
+  QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
+  for (auto grade: grades.toStdMap())
+    series->append(grade.first, grade.second);
+  series->setLabelsVisible(true);
+
+  // Apply colors similar to those from the official website
+  for (auto slice: series->slices()) {
+    // Use the first char only to determine grade and color
+    QString label = slice->label().at(0);
+    QMap<QString, QColor>::const_iterator color = grade_colors_.find(label);
+    if (color != grade_colors_.end())
+      slice->setBrush(color.value());
+  }
+
+  return series;
+}
+
+
+// Creation functions
+Chart* grade_distribution(Portfolio *portfolio) {
+  return new GradeChart(portfolio);
 }
 
 } // namespace Charts
