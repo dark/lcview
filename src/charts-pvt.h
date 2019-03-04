@@ -21,6 +21,8 @@
 #include "charts.h"
 
 #include <QPieSeries>
+#include <QtWidgets/QCheckBox>
+
 
 namespace Charts {
 
@@ -39,6 +41,10 @@ private:
   static const QMap<QString, QColor> grade_colors_;
   Portfolio *portfolio_;
   QWidget *widget_;
+
+  // subcomponents and subwidgets
+  QtCharts::QChart *chart_;
+  QCheckBox *coarse_checkbox_;
 
   static QtCharts::QPieSeries* create_series(Portfolio *portfolio, bool coarse);
 };

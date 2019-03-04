@@ -46,20 +46,22 @@ GradeChart::GradeChart(Portfolio *portfolio)
   : portfolio_(portfolio) {
   QtCharts::QPieSeries *series = create_series(portfolio_, true);
 
-  QtCharts::QChart *chart = new QtCharts::QChart();
-  chart->addSeries(series);
-  chart->setTitle("<h1>Node grade distribution</h1>");
-  chart->legend()->hide();
-  chart->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
+  chart_ = new QtCharts::QChart();
+  chart_->addSeries(series);
+  chart_->setTitle("<h1>Node grade distribution</h1>");
+  chart_->legend()->hide();
+  chart_->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
 
-  QtCharts::QChartView *chartView = new QtCharts::QChartView(chart);
+  QtCharts::QChartView *chartView = new QtCharts::QChartView(chart_);
   chartView->setRenderHint(QPainter::Antialiasing);
 
   // Buttons to make the chart interactive
-  QCheckBox *checkbox = new QCheckBox();
+  coarse_checkbox_ = new QCheckBox();
+  coarse_checkbox_->setChecked(true);
   QFormLayout *chartSettingsLayout = new QFormLayout();
-  chartSettingsLayout->addRow("Coarse", checkbox);
-  QObject::connect(checkbox, &QCheckBox::toggled, this, &GradeChart::on_coarse_button_clicked);
+  chartSettingsLayout->addRow("Coarse", coarse_checkbox_);
+  QObject::connect(coarse_checkbox_, &QCheckBox::toggled,
+                   this, &GradeChart::on_coarse_button_clicked);
 
   // Add wrapper layout to put everything together
   QVBoxLayout *mainLayout = new QVBoxLayout();
@@ -78,6 +80,11 @@ GradeChart::~GradeChart() {
 
 
 void GradeChart::on_coarse_button_clicked() {
+  // Regen the series and re-apply it
+  QtCharts::QPieSeries *series = GradeChart::create_series(portfolio_, coarse_checkbox_->isChecked());
+
+  chart_->removeAllSeries();
+  chart_->addSeries(series);
 }
 
 
