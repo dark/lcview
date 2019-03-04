@@ -40,7 +40,8 @@ HEADERS += \
     src/attributes.h \
     src/filter.h \
     src/charts.h \
-    src/aggregator.h
+    src/aggregator.h \
+    src/charts-pvt.h
 
 FORMS += \
     src/lcview.ui

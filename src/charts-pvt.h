@@ -18,19 +18,29 @@
 
 #pragma once
 
-#include <QWidget>
+#include "charts.h"
 
-#include "portfolio.h"
-
-class Chart : public QObject {
-public:
-  Chart();
-  virtual ~Chart();
-  virtual QWidget* widget() = 0;
-};
+#include <QPieSeries>
 
 namespace Charts {
 
-Chart* grade_distribution(Portfolio *p);
+class GradeChart : public Chart {
+  Q_OBJECT
+
+public:
+  explicit GradeChart(Portfolio *portfolio);
+  virtual ~GradeChart();
+  virtual QWidget* widget() { return widget_; }
+
+private slots:
+  void on_coarse_button_clicked();
+
+private:
+  static const QMap<QString, QColor> grade_colors_;
+  Portfolio *portfolio_;
+  QWidget *widget_;
+
+  static QtCharts::QPieSeries* create_series(Portfolio *portfolio, bool coarse);
+};
 
 }; // namespace Charts

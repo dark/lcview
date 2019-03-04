@@ -25,25 +25,12 @@
 #include <QtWidgets/QFormLayout>
 
 #include "aggregator.h"
+#include "charts-pvt.h"
 
 Chart::Chart() {}
 Chart::~Chart() {}
 
 namespace Charts {
-
-class GradeChart : public Chart {
-public:
-  explicit GradeChart(Portfolio *portfolio);
-  virtual ~GradeChart();
-  virtual QWidget* widget() { return widget_; }
-
-private:
-  static const QMap<QString, QColor> grade_colors_;
-  Portfolio *portfolio_;
-  QWidget *widget_;
-
-  static QtCharts::QPieSeries* create_series(Portfolio *portfolio, bool coarse);
-};
 
 const QMap<QString, QColor> GradeChart::grade_colors_ = {
   {"A", QColor(82, 120, 165)},
@@ -72,6 +59,7 @@ GradeChart::GradeChart(Portfolio *portfolio)
   QCheckBox *checkbox = new QCheckBox();
   QFormLayout *chartSettingsLayout = new QFormLayout();
   chartSettingsLayout->addRow("Coarse", checkbox);
+  QObject::connect(checkbox, &QCheckBox::toggled, this, &GradeChart::on_coarse_button_clicked);
 
   // Add wrapper layout to put everything together
   QVBoxLayout *mainLayout = new QVBoxLayout();
@@ -86,6 +74,10 @@ GradeChart::GradeChart(Portfolio *portfolio)
 
 GradeChart::~GradeChart() {
   // none of the pointers is owned by this class
+}
+
+
+void GradeChart::on_coarse_button_clicked() {
 }
 
 
