@@ -21,13 +21,6 @@
 #include <QDate>
 #include <QString>
 
-#define NOTE_KEY_INTEREST "InterestRate"
-#define NOTE_KEY_GRADE "Grade"
-#define NOTE_KEY_TERM "Term"
-#define NOTE_KEY_STATUS "Status"
-#define NOTE_KEY_ADDRESS_STATE "addr_state"
-#define NOTE_KEY_LOAN_ISSUE_DATE "Loan Issue Date"
-
 namespace Attributes {
 enum class NoteField {
   INTEREST,
@@ -41,17 +34,17 @@ enum class NoteField {
 inline QString field_key(NoteField field) {
   switch (field) {
     case NoteField::INTEREST:
-      return NOTE_KEY_INTEREST;
+      return "InterestRate";
     case NoteField::GRADE:
-      return NOTE_KEY_GRADE;
+      return "Grade";
     case NoteField::TERM:
-      return NOTE_KEY_TERM;
+      return "Term";
     case NoteField::STATUS:
-      return NOTE_KEY_STATUS;
+      return "Status";
     case NoteField::ADDRESS_STATE:
-      return NOTE_KEY_ADDRESS_STATE;
+      return "addr_state";
     case NoteField::LOAN_ISSUE_DATE:
-      return NOTE_KEY_LOAN_ISSUE_DATE;
+      return "Loan Issue Date";
   }
   return "<key-error>";
 }
