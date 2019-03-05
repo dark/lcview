@@ -97,6 +97,7 @@ void LCView::build_main_layout() {
 
   main_layout_ = new QVBoxLayout();
   main_layout_->addLayout(filters_row);
+  // This stretchable space will be replaced by the chart widgets as needed
   main_layout_->addStretch();
 
   // We need to wrap the layout in a widget that includes everything.
