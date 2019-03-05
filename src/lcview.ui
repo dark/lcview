@@ -40,7 +40,7 @@
      <normaloff>:/images/images/load.png</normaloff>:/images/images/load.png</iconset>
    </property>
    <property name="text">
-    <string>Load portfolio ...</string>
+    <string>Load portfolio from file ...</string>
    </property>
    <property name="toolTip">
     <string>Load portfolio from file</string>
