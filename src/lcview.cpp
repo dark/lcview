@@ -23,6 +23,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QMessageBox>
+#include <QPushButton>
 #include <QVBoxLayout>
 
 
@@ -74,7 +75,7 @@ void LCView::load_portfolio_from_file() {
 
 void LCView::build_main_layout() {
   // Setup filters panel
-  QLabel *label = new QLabel(tr("Filters:"));
+  QLabel *label = new QLabel(tr("Filter:"));
   QComboBox *filter_selector = new QComboBox;
   filter_selector->addItem(tr("Grade"));
   filter_selector->addItem(tr("Term"));
@@ -83,10 +84,17 @@ void LCView::build_main_layout() {
   QLineEdit *filter_text= new QLineEdit;
   filter_text->setPlaceholderText("enter filter condition here");
 
+  QPushButton *apply_button = new QPushButton(tr("Apply"));
+  QPushButton *reset_button = new QPushButton(tr("Reset"));
+
+  // Layout for the filters row
   QHBoxLayout *filters_row = new QHBoxLayout();
   filters_row->addWidget(label);
   filters_row->addWidget(filter_selector);
   filters_row->addWidget(filter_text);
+  filters_row->addWidget(apply_button);
+  filters_row->addWidget(reset_button);
+
   main_layout_ = new QVBoxLayout();
   main_layout_->addLayout(filters_row);
   main_layout_->addStretch();
