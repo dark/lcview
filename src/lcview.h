@@ -19,6 +19,8 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QVBoxLayout>
+
 
 #include "charts.h"
 #include "portfolio.h"
@@ -44,7 +46,10 @@ private:
   Ui::LCView *ui_;
   Portfolio *portfolio_;
   Chart *chart_;
+  QVBoxLayout *main_layout_;
 
   void load_portfolio_from_file();
+  void build_main_layout();
+  void set_chart_widget(QWidget *chart);
   void refresh_charts();
 };

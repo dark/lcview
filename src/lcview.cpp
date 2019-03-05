@@ -18,8 +18,13 @@
 
 #include "lcview.h"
 
+#include <QComboBox>
 #include <QFileDialog>
+#include <QLabel>
+#include <QLineEdit>
 #include <QMessageBox>
+#include <QVBoxLayout>
+
 
 #include "ui_lcview.h"
 
@@ -28,8 +33,11 @@ LCView::LCView(QWidget *parent)
   : QMainWindow(parent),
     ui_(new Ui::LCView),
     portfolio_(nullptr),
-    chart_(nullptr) {
+    chart_(nullptr),
+    main_layout_(nullptr) {
   ui_->setupUi(this);
+
+  build_main_layout();
 }
 
 LCView::~LCView() {
@@ -64,18 +72,54 @@ void LCView::load_portfolio_from_file() {
   }
 }
 
-void LCView::on_actionExit_triggered() {
-  QCoreApplication::quit();
+void LCView::build_main_layout() {
+  // Setup filters panel
+  QLabel *label = new QLabel(tr("Filters:"));
+  QComboBox *filter_selector = new QComboBox;
+  filter_selector->addItem(tr("Grade"));
+  filter_selector->addItem(tr("Term"));
+  filter_selector->addItem(tr("Status"));
+
+  QLineEdit *filter_text= new QLineEdit;
+  filter_text->setPlaceholderText("enter filter condition here");
+
+  QHBoxLayout *filters_row = new QHBoxLayout();
+  filters_row->addWidget(label);
+  filters_row->addWidget(filter_selector);
+  filters_row->addWidget(filter_text);
+  main_layout_ = new QVBoxLayout();
+  main_layout_->addLayout(filters_row);
+  main_layout_->addStretch();
+
+  // We need to wrap the layout in a widget that includes everything.
+  // This is because the QMainWindow has a top-level layout that cannot be changed.
+  QWidget *main_widget = new QWidget();
+  main_widget->setLayout(main_layout_);
+
+  setCentralWidget(main_widget);
 }
 
-void LCView::on_actionLoad_triggered() {
-  LCView::load_portfolio_from_file();
+void LCView::set_chart_widget(QWidget *chart) {
+  if (!main_layout_) {
+    qWarning("Cannot set chart widget before main layout is setup!");
+    return;
+  }
+
+  QLayoutItem *old_widget = main_layout_->takeAt(1);
+  if (old_widget)
+    delete old_widget;
+  if (chart) {
+    main_layout_->addWidget(chart);
+  } else {
+    // Just put a spacer.
+    main_layout_->addStretch();
+  }
 }
 
 void LCView::refresh_charts() {
   if (!portfolio_) {
-    qWarning("Resetting central widget to nullptr because portfolio is empty");
-    this->setCentralWidget(nullptr);
+    qWarning("Resetting chart widget because portfolio is empty");
+    set_chart_widget(nullptr);
     return;
   }
 
@@ -87,5 +131,13 @@ void LCView::refresh_charts() {
   delete chart_;
   chart_ = chart;
 
-  this->setCentralWidget(chart->widget());
+  set_chart_widget(chart->widget());
+}
+
+void LCView::on_actionExit_triggered() {
+  QCoreApplication::quit();
+}
+
+void LCView::on_actionLoad_triggered() {
+  LCView::load_portfolio_from_file();
 }
