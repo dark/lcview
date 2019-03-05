@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include <QLineEdit>
 #include <QMainWindow>
 #include <QVBoxLayout>
 
@@ -37,19 +38,27 @@ public:
   explicit LCView(QWidget *parent = nullptr);
   ~LCView();
 
-private slots:
-  void on_actionExit_triggered();
-
-  void on_actionLoad_triggered();
-
 private:
   Ui::LCView *ui_;
+  // This is the portfolio loaded from file.
   Portfolio *portfolio_;
-  Chart *chart_;
+  // This is the portfolio, as filtered and displayed.
+  Portfolio *display_portfolio_;
   QVBoxLayout *main_layout_;
+
+  // subcomponents and subwidgets
+  Chart *chart_;
+  QLineEdit *filter_text_;
 
   void load_portfolio_from_file();
   void build_main_layout();
   void set_chart_widget(QWidget *chart);
+  Portfolio *apply_filters_to_portfolio();
   void refresh_charts();
+
+private slots:
+  void on_actionExit_triggered();
+  void on_actionLoad_triggered();
+  void on_apply_button_clicked();
+  void on_reset_button_clicked();
 };

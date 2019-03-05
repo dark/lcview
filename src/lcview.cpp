@@ -21,7 +21,6 @@
 #include <QComboBox>
 #include <QFileDialog>
 #include <QLabel>
-#include <QLineEdit>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -34,8 +33,9 @@ LCView::LCView(QWidget *parent)
   : QMainWindow(parent),
     ui_(new Ui::LCView),
     portfolio_(nullptr),
-    chart_(nullptr),
-    main_layout_(nullptr) {
+    display_portfolio_(nullptr),
+    main_layout_(nullptr),
+    chart_(nullptr) {
   ui_->setupUi(this);
 
   build_main_layout();
@@ -46,9 +46,12 @@ LCView::~LCView() {
   chart_ = nullptr;
   delete chart;
 
+  Portfolio *display_portfolio = display_portfolio_;
+  display_portfolio_ = nullptr;
   Portfolio *portfolio = portfolio_;
   portfolio_ = nullptr;
   refresh_charts();
+  delete display_portfolio;
   delete portfolio;
 
   delete ui_;
@@ -81,17 +84,20 @@ void LCView::build_main_layout() {
   filter_selector->addItem(tr("Term"));
   filter_selector->addItem(tr("Status"));
 
-  QLineEdit *filter_text= new QLineEdit;
-  filter_text->setPlaceholderText("enter filter condition here");
+  filter_text_ = new QLineEdit;
+  filter_text_->setPlaceholderText("enter filter condition here");
 
+  // Buttons and their actions
   QPushButton *apply_button = new QPushButton(tr("Apply"));
   QPushButton *reset_button = new QPushButton(tr("Reset"));
+  connect(apply_button, SIGNAL(clicked()), this, SLOT(on_apply_button_clicked()));
+  connect(reset_button, SIGNAL(clicked()), this, SLOT(on_reset_button_clicked()));
 
   // Layout for the filters row
   QHBoxLayout *filters_row = new QHBoxLayout();
   filters_row->addWidget(label);
   filters_row->addWidget(filter_selector);
-  filters_row->addWidget(filter_text);
+  filters_row->addWidget(filter_text_);
   filters_row->addWidget(apply_button);
   filters_row->addWidget(reset_button);
 
@@ -125,6 +131,11 @@ void LCView::set_chart_widget(QWidget *chart) {
   }
 }
 
+Portfolio *LCView::apply_filters_to_portfolio() {
+  // TODO
+  return portfolio_;
+}
+
 void LCView::refresh_charts() {
   if (!portfolio_) {
     qWarning("Resetting chart widget because portfolio is empty");
@@ -132,7 +143,14 @@ void LCView::refresh_charts() {
     return;
   }
 
-  Chart *chart = Charts::grade_distribution(portfolio_);
+  display_portfolio_ = apply_filters_to_portfolio();
+  if (!display_portfolio_) {
+    qWarning("Resetting chart widget because display portfolio is empty");
+    set_chart_widget(nullptr);
+    return;
+  }
+
+  Chart *chart = Charts::grade_distribution(display_portfolio_);
   if (!chart) {
     qWarning("Nothing to do with a null chart");
     return;
@@ -149,4 +167,13 @@ void LCView::on_actionExit_triggered() {
 
 void LCView::on_actionLoad_triggered() {
   LCView::load_portfolio_from_file();
+}
+
+void LCView::on_apply_button_clicked() {
+  refresh_charts();
+}
+
+void LCView::on_reset_button_clicked() {
+  filter_text_->clear();
+  refresh_charts();
 }
