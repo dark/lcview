@@ -19,6 +19,7 @@
 #pragma once
 
 #include <QDate>
+#include <QMetaType>
 #include <QString>
 
 namespace Attributes {
@@ -118,3 +119,7 @@ inline QDate parse_loan_issue_date(QString s) {
 }
 
 }; // namespace Attributes
+
+
+// Needed to wrap NoteField in a QVariant
+Q_DECLARE_METATYPE(Attributes::NoteField)

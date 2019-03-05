@@ -18,7 +18,6 @@
 
 #include "lcview.h"
 
-#include <QComboBox>
 #include <QFileDialog>
 #include <QLabel>
 #include <QMessageBox>
@@ -35,7 +34,9 @@ LCView::LCView(QWidget *parent)
     portfolio_(nullptr),
     display_portfolio_(nullptr),
     main_layout_(nullptr),
-    chart_(nullptr) {
+    chart_(nullptr),
+    filter_selector_(nullptr),
+    filter_text_(nullptr) {
   ui_->setupUi(this);
 
   build_main_layout();
@@ -78,11 +79,14 @@ void LCView::load_portfolio_from_file() {
 
 void LCView::build_main_layout() {
   // Setup filters panel
-  QLabel *label = new QLabel(tr("Filter:"));
-  QComboBox *filter_selector = new QComboBox;
-  filter_selector->addItem(tr("Grade"));
-  filter_selector->addItem(tr("Term"));
-  filter_selector->addItem(tr("Status"));
+  QLabel *filter_label = new QLabel(tr("Filter:"));
+  filter_selector_ = new QComboBox;
+  filter_selector_->insertItem(1, "Grade",
+                               QVariant::fromValue(Attributes::NoteField::GRADE));
+  filter_selector_->insertItem(2, "Term",
+                               QVariant::fromValue(Attributes::NoteField::TERM));
+  filter_selector_->insertItem(3, "Status",
+                               QVariant::fromValue(Attributes::NoteField::STATUS));
 
   filter_text_ = new QLineEdit;
   filter_text_->setPlaceholderText("enter filter condition here");
@@ -95,8 +99,8 @@ void LCView::build_main_layout() {
 
   // Layout for the filters row
   QHBoxLayout *filters_row = new QHBoxLayout();
-  filters_row->addWidget(label);
-  filters_row->addWidget(filter_selector);
+  filters_row->addWidget(filter_label);
+  filters_row->addWidget(filter_selector_);
   filters_row->addWidget(filter_text_);
   filters_row->addWidget(apply_button);
   filters_row->addWidget(reset_button);
@@ -132,8 +136,21 @@ void LCView::set_chart_widget(QWidget *chart) {
 }
 
 Portfolio *LCView::apply_filters_to_portfolio() {
-  // TODO
-  return portfolio_;
+  if (!filter_selector_ || !filter_text_) {
+    qWarning("Cannot apply filters, the UI is not setup!");
+    return portfolio_;
+  }
+
+  // The NoteField is embedded in the QVariant attached to each element of the selector
+  Attributes::NoteField field = filter_selector_->currentData().value<Attributes::NoteField>();
+  QString value = filter_text_->text();
+  if (value.isEmpty())
+    // nothing to filter
+    return portfolio_;
+
+  Filter filter(field, value);
+
+  return portfolio_->filter({filter});
 }
 
 void LCView::refresh_charts() {

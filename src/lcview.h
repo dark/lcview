@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include <QComboBox>
 #include <QLineEdit>
 #include <QMainWindow>
 #include <QVBoxLayout>
@@ -48,6 +49,7 @@ private:
 
   // subcomponents and subwidgets
   Chart *chart_;
+  QComboBox *filter_selector_;
   QLineEdit *filter_text_;
 
   void load_portfolio_from_file();
