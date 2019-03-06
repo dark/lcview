@@ -125,8 +125,10 @@ void LCView::set_chart_widget(QWidget *chart) {
   }
 
   QLayoutItem *old_widget = main_layout_->takeAt(1);
-  if (old_widget)
+  if (old_widget) {
+    delete old_widget->widget();
     delete old_widget;
+  }
   if (chart) {
     main_layout_->addWidget(chart);
   } else {
