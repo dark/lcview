@@ -34,7 +34,7 @@ LCView::LCView(QWidget *parent)
     portfolio_(nullptr),
     display_portfolio_(nullptr),
     main_layout_(nullptr),
-    chart_(nullptr),
+    charts_container_(nullptr),
     filter_selector_(nullptr),
     filter_text_(nullptr) {
   ui_->setupUi(this);
@@ -43,9 +43,9 @@ LCView::LCView(QWidget *parent)
 }
 
 LCView::~LCView() {
-  Chart *chart = chart_;
-  chart_ = nullptr;
-  delete chart;
+  ChartsContainer *charts_container = charts_container_;
+  charts_container_ = nullptr;
+  delete charts_container;
 
   // Do not delete this - it is only a "view" of the general portfolio, that will take care of cleanup
   display_portfolio_ = nullptr;
@@ -105,10 +105,12 @@ void LCView::build_main_layout() {
   filters_row->addWidget(apply_button);
   filters_row->addWidget(reset_button);
 
+  // Widget for the main charts tabbed area
+  charts_container_ = new ChartsContainer();
+
   main_layout_ = new QVBoxLayout();
   main_layout_->addLayout(filters_row);
-  // This stretchable space will be replaced by the chart widgets as needed
-  main_layout_->addStretch();
+  main_layout_->addWidget(charts_container_);
 
   // We need to wrap the layout in a widget that includes everything.
   // This is because the QMainWindow has a top-level layout that cannot be changed.
@@ -116,25 +118,6 @@ void LCView::build_main_layout() {
   main_widget->setLayout(main_layout_);
 
   setCentralWidget(main_widget);
-}
-
-void LCView::set_chart_widget(QWidget *chart) {
-  if (!main_layout_) {
-    qWarning("Cannot set chart widget before main layout is setup!");
-    return;
-  }
-
-  QLayoutItem *old_widget = main_layout_->takeAt(1);
-  if (old_widget) {
-    delete old_widget->widget();
-    delete old_widget;
-  }
-  if (chart) {
-    main_layout_->addWidget(chart);
-  } else {
-    // Just put a spacer.
-    main_layout_->addStretch();
-  }
 }
 
 Portfolio *LCView::apply_filters_to_portfolio() {
@@ -156,28 +139,21 @@ Portfolio *LCView::apply_filters_to_portfolio() {
 }
 
 void LCView::refresh_charts() {
+  if (!charts_container_) {
+    qWarning("Charts container is nullptr, ignoring refresh");
+    return;
+  }
+
   if (!portfolio_) {
-    qWarning("Resetting chart widget because portfolio is empty");
-    set_chart_widget(nullptr);
+    qWarning("Resetting charts container because portfolio is empty");
+    charts_container_->update_displayed_portfolio(nullptr);
     return;
   }
 
   display_portfolio_ = apply_filters_to_portfolio();
-  if (!display_portfolio_) {
-    qWarning("Resetting chart widget because display portfolio is empty");
-    set_chart_widget(nullptr);
-    return;
-  }
-
-  Chart *chart = Charts::grade_distribution(display_portfolio_);
-  if (!chart) {
-    qWarning("Nothing to do with a null chart");
-    return;
-  }
-  delete chart_;
-  chart_ = chart;
-
-  set_chart_widget(chart->widget());
+  if (!display_portfolio_)
+    qWarning("Resetting charts container because display portfolio is empty");
+  charts_container_->update_displayed_portfolio(display_portfolio_);
 }
 
 void LCView::on_actionExit_triggered() {

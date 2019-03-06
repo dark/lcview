@@ -18,48 +18,27 @@
 
 #pragma once
 
-#include <QComboBox>
-#include <QLineEdit>
-#include <QMainWindow>
 #include <QVBoxLayout>
+#include <QWidget>
 
-
-#include "chartscontainer.h"
+#include "charts.h"
 #include "portfolio.h"
 
-namespace Ui {
-class LCView;
-}
 
-class LCView : public QMainWindow
-{
+class ChartTab : public QWidget {
   Q_OBJECT
 
 public:
-  explicit LCView(QWidget *parent = nullptr);
-  ~LCView();
+  explicit ChartTab(QWidget *parent);
+
+  void update_displayed_portfolio(Portfolio* portfolio);
 
 private:
-  Ui::LCView *ui_;
-  // This is the portfolio loaded from file.
-  Portfolio *portfolio_;
-  // This is the portfolio, as filtered and displayed.
-  Portfolio *display_portfolio_;
   QVBoxLayout *main_layout_;
 
-  // subcomponents and subwidgets
-  ChartsContainer *charts_container_;
-  QComboBox *filter_selector_;
-  QLineEdit *filter_text_;
+  Chart *chart_;
 
-  void load_portfolio_from_file();
-  void build_main_layout();
-  Portfolio *apply_filters_to_portfolio();
-  void refresh_charts();
-
-private slots:
-  void on_actionExit_triggered();
-  void on_actionLoad_triggered();
-  void on_apply_button_clicked();
-  void on_reset_button_clicked();
+  void set_chart(Chart *chart);
 };
+
+
