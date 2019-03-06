@@ -47,12 +47,12 @@ LCView::~LCView() {
   chart_ = nullptr;
   delete chart;
 
-  Portfolio *display_portfolio = display_portfolio_;
+  // Do not delete this - it is only a "view" of the general portfolio, that will take care of cleanup
   display_portfolio_ = nullptr;
+
   Portfolio *portfolio = portfolio_;
   portfolio_ = nullptr;
   refresh_charts();
-  delete display_portfolio;
   delete portfolio;
 
   delete ui_;
