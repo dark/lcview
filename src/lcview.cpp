@@ -19,10 +19,7 @@
 #include "lcview.h"
 
 #include <QFileDialog>
-#include <QLabel>
 #include <QMessageBox>
-#include <QPushButton>
-#include <QVBoxLayout>
 
 #include "ui_lcview.h"
 

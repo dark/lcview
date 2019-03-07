@@ -18,8 +18,6 @@
 
 #pragma once
 
-#include <QComboBox>
-#include <QLineEdit>
 #include <QMainWindow>
 #include <QVBoxLayout>
 
