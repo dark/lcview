@@ -32,6 +32,7 @@ Chart::~Chart() {}
 
 namespace Charts {
 
+// GradeChart
 const QMap<QString, QColor> GradeChart::grade_colors_ = {
   {"A", QColor(82, 120, 165)},
   {"B", QColor(110, 198, 226)},
@@ -48,7 +49,7 @@ GradeChart::GradeChart(Portfolio *portfolio)
 
   chart_ = new QtCharts::QChart();
   chart_->addSeries(series);
-  chart_->setTitle("<h1>Node grade distribution</h1>");
+  chart_->setTitle("<h1>Note grade distribution</h1>");
   chart_->legend()->hide();
   chart_->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
 
