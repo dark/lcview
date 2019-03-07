@@ -117,7 +117,7 @@ StatusChart::StatusChart(Portfolio *portfolio)
 
   chart_ = new QtCharts::QChart();
   chart_->addSeries(series);
-  chart_->setTitle("<h1>Node status distribution</h1>");
+  chart_->setTitle("<h1>Note status distribution</h1>");
   chart_->legend()->hide();
   chart_->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
 
