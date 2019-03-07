@@ -60,6 +60,7 @@ private:
 private slots:
   void on_actionExit_triggered();
   void on_actionLoad_triggered();
+  void on_actionAbout_triggered();
   void on_apply_button_clicked();
   void on_reset_button_clicked();
 };

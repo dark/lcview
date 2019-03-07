@@ -164,6 +164,14 @@ void LCView::on_actionLoad_triggered() {
   LCView::load_portfolio_from_file();
 }
 
+void LCView::on_actionAbout_triggered() {
+  QMessageBox::about(this,
+                     "About lcview",
+                     "lcview: A better viewer for Lending Club notes \n" \
+                     "\n" \
+                     "Copyright (C) 2019 Marco Leogrande");
+}
+
 void LCView::on_apply_button_clicked() {
   refresh_charts();
 }
