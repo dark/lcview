@@ -32,7 +32,8 @@ SOURCES += \
     src/filter.cpp \
     src/charts.cpp \
     src/aggregator.cpp \
-    src/chartscontainer.cpp
+    src/chartscontainer.cpp \
+    src/attributes.cpp
 
 HEADERS += \
     src/lcview.h \
