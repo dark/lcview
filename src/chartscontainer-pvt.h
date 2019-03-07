@@ -31,7 +31,7 @@ class ChartTab : public QWidget {
 public:
   explicit ChartTab(QWidget *parent);
 
-  void update_displayed_portfolio(Portfolio* portfolio);
+  virtual void update_displayed_portfolio(Portfolio* portfolio);
 
 private:
   QVBoxLayout *main_layout_;
@@ -39,6 +39,13 @@ private:
   Chart *chart_;
 
   void set_chart(Chart *chart);
+  virtual Chart* generate_chart(Portfolio* portfolio) = 0;
 };
 
 
+class GradeDistributionChartTab : public ChartTab {
+public:
+  explicit GradeDistributionChartTab(QWidget *parent);
+private:
+  virtual Chart* generate_chart(Portfolio* portfolio) override;
+};

@@ -24,7 +24,7 @@
 ChartsContainer::ChartsContainer()
   : QTabWidget(nullptr) {
   // Grade distribution chart tab
-  ChartTab *tab = new ChartTab(this);
+  ChartTab *tab = new GradeDistributionChartTab(this);
   tabs_.append(tab);
   addTab(tab, tr("Grade distribution"));
 }
@@ -50,7 +50,7 @@ void ChartTab::update_displayed_portfolio(Portfolio *portfolio) {
     return;
   }
 
-  Chart *chart = Charts::grade_distribution(portfolio);
+  Chart *chart = generate_chart(portfolio);
   if (!chart)
     qWarning("null chart was generated");
   set_chart(chart);
@@ -72,4 +72,13 @@ void ChartTab::set_chart(Chart *chart) {
     // Just put a spacer.
     main_layout_->addStretch();
   }
+}
+
+
+// Specialized tabs
+GradeDistributionChartTab::GradeDistributionChartTab(QWidget *parent)
+  : ChartTab(parent) {}
+
+Chart* GradeDistributionChartTab::generate_chart(Portfolio* portfolio) {
+  return Charts::grade_distribution(portfolio);
 }
