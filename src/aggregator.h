@@ -25,5 +25,6 @@
 namespace Aggregator {
 
 QMap<QString, int> grades(Portfolio *p, bool coarse);
+QMap<Attributes::NoteStatus, int> statuses(Portfolio *p);
 
 }; // namespace Aggregator

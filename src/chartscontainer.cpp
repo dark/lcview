@@ -23,10 +23,13 @@
 
 ChartsContainer::ChartsContainer()
   : QTabWidget(nullptr) {
-  // Grade distribution chart tab
-  ChartTab *tab = new GradeDistributionChartTab(this);
+  add_one_tab(new GradeDistributionChartTab(this), tr("Grade distribution"));
+  add_one_tab(new StatusDistributionChartTab(this), tr("Status distribution"));
+}
+
+void ChartsContainer::add_one_tab(ChartTab *tab, QString label) {
   tabs_.append(tab);
-  addTab(tab, tr("Grade distribution"));
+  addTab(tab, label);
 }
 
 void ChartsContainer::update_displayed_portfolio(Portfolio *portfolio) {
@@ -81,4 +84,11 @@ GradeDistributionChartTab::GradeDistributionChartTab(QWidget *parent)
 
 Chart* GradeDistributionChartTab::generate_chart(Portfolio* portfolio) {
   return Charts::grade_distribution(portfolio);
+}
+
+StatusDistributionChartTab::StatusDistributionChartTab(QWidget *parent)
+  : ChartTab(parent) {}
+
+Chart* StatusDistributionChartTab::generate_chart(Portfolio* portfolio) {
+  return Charts::status_distribution(portfolio);
 }

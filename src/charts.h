@@ -32,5 +32,6 @@ public:
 namespace Charts {
 
 Chart* grade_distribution(Portfolio *p);
+Chart* status_distribution(Portfolio *p);
 
 }; // namespace Charts

@@ -19,7 +19,9 @@
 #include "aggregator.h"
 
 
-QMap<QString, int> Aggregator::grades(Portfolio *p, bool coarse) {
+namespace Aggregator {
+
+QMap<QString, int> grades(Portfolio *p, bool coarse) {
   QMap<QString, int> grades;
   if (!p)
     return grades;
@@ -41,3 +43,19 @@ QMap<QString, int> Aggregator::grades(Portfolio *p, bool coarse) {
   }
   return coarse_grades;
 }
+
+
+QMap<Attributes::NoteStatus, int> statuses(Portfolio *p) {
+  QMap<Attributes::NoteStatus, int> statuses;
+  if (!p)
+    return statuses;
+
+  for (auto note = p->begin(); note != p->end(); ++note) {
+    Attributes::NoteStatus status = note->get_status();
+    ++statuses[status];
+  }
+
+  return statuses;
+}
+
+}; // namespace Aggregator

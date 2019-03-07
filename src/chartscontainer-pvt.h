@@ -49,3 +49,11 @@ public:
 private:
   virtual Chart* generate_chart(Portfolio* portfolio) override;
 };
+
+
+class StatusDistributionChartTab : public ChartTab {
+public:
+  explicit StatusDistributionChartTab(QWidget *parent);
+private:
+  virtual Chart* generate_chart(Portfolio* portfolio) override;
+};

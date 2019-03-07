@@ -49,4 +49,21 @@ private:
   static QtCharts::QPieSeries* create_series(Portfolio *portfolio, bool coarse);
 };
 
+
+class StatusChart : public Chart {
+public:
+  explicit StatusChart(Portfolio *portfolio);
+  virtual ~StatusChart();
+  virtual QWidget* widget() { return widget_; }
+
+private:
+  Portfolio *portfolio_;
+  QWidget *widget_;
+
+  // subcomponents and subwidgets
+  QtCharts::QChart *chart_;
+
+  static QtCharts::QPieSeries* create_series(Portfolio *portfolio);
+};
+
 }; // namespace Charts

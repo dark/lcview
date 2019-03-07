@@ -110,9 +110,47 @@ QtCharts::QPieSeries* GradeChart::create_series(Portfolio *portfolio, bool coars
 }
 
 
+// StatusChart
+StatusChart::StatusChart(Portfolio *portfolio)
+  : portfolio_(portfolio) {
+  QtCharts::QPieSeries *series = create_series(portfolio_);
+
+  chart_ = new QtCharts::QChart();
+  chart_->addSeries(series);
+  chart_->setTitle("<h1>Node status distribution</h1>");
+  chart_->legend()->hide();
+  chart_->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
+
+  QtCharts::QChartView *chartView = new QtCharts::QChartView(chart_);
+  chartView->setRenderHint(QPainter::Antialiasing);
+
+  widget_ = chartView;
+}
+
+
+StatusChart::~StatusChart() {
+  // none of the pointers is owned by this class
+}
+
+
+QtCharts::QPieSeries* StatusChart::create_series(Portfolio *portfolio) {
+  QMap<Attributes::NoteStatus, int> grades = Aggregator::statuses(portfolio);
+
+  QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
+  for (auto grade: grades.toStdMap())
+    series->append(Attributes::status_to_string(grade.first), grade.second);
+  series->setLabelsVisible(true);
+
+  return series;
+}
+
 // Creation functions
 Chart* grade_distribution(Portfolio *portfolio) {
   return new GradeChart(portfolio);
+}
+
+Chart* status_distribution(Portfolio *portfolio) {
+  return new StatusChart(portfolio);
 }
 
 } // namespace Charts

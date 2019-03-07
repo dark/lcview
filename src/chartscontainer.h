@@ -35,4 +35,6 @@ public:
 
 private:
   QList<ChartTab*> tabs_;
+
+  void add_one_tab(ChartTab *tab, QString label);
 };
