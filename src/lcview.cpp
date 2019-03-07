@@ -24,7 +24,6 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-
 #include "ui_lcview.h"
 
 
@@ -34,9 +33,8 @@ LCView::LCView(QWidget *parent)
     portfolio_(nullptr),
     display_portfolio_(nullptr),
     main_layout_(nullptr),
-    charts_container_(nullptr),
-    filter_selector_(nullptr),
-    filter_text_(nullptr) {
+    filters_panel_(nullptr),
+    charts_container_(nullptr) {
   ui_->setupUi(this);
 
   build_main_layout();
@@ -47,16 +45,24 @@ LCView::~LCView() {
   charts_container_ = nullptr;
   delete charts_container;
 
+  FiltersPanel *filters_panel = filters_panel_;
+  filters_panel_ = nullptr;
+  delete filters_panel;
+
   // Do not delete this - it is only a "view" of the general portfolio, that will take care of cleanup
   display_portfolio_ = nullptr;
 
   Portfolio *portfolio = portfolio_;
   portfolio_ = nullptr;
-  refresh_charts();
+  refresh_charts(nullptr);
   delete portfolio;
 
   delete ui_;
   ui_ = nullptr;
+}
+
+void LCView::on_filter_updated(Filter *filter) {
+  refresh_charts(filter);
 }
 
 void LCView::load_portfolio_from_file() {
@@ -70,7 +76,8 @@ void LCView::load_portfolio_from_file() {
   if (p) {
     Portfolio *old_portfolio = portfolio_;
     portfolio_ = p;
-    refresh_charts();
+    filters_panel_->reset_view();
+    refresh_charts(nullptr);
     delete old_portfolio;
   } else {
     QMessageBox::warning(this, "Failed to load portfolio", "Failed to load portfolio from file: " + filename);
@@ -79,37 +86,13 @@ void LCView::load_portfolio_from_file() {
 
 void LCView::build_main_layout() {
   // Setup filters panel
-  QLabel *filter_label = new QLabel(tr("Filter:"));
-  filter_selector_ = new QComboBox;
-  filter_selector_->insertItem(1, "Grade",
-                               QVariant::fromValue(Attributes::NoteField::GRADE));
-  filter_selector_->insertItem(2, "Term",
-                               QVariant::fromValue(Attributes::NoteField::TERM));
-  filter_selector_->insertItem(3, "Status",
-                               QVariant::fromValue(Attributes::NoteField::STATUS));
-
-  filter_text_ = new QLineEdit;
-  filter_text_->setPlaceholderText("enter filter condition here");
-
-  // Buttons and their actions
-  QPushButton *apply_button = new QPushButton(tr("Apply"));
-  QPushButton *reset_button = new QPushButton(tr("Reset"));
-  connect(apply_button, SIGNAL(clicked()), this, SLOT(on_apply_button_clicked()));
-  connect(reset_button, SIGNAL(clicked()), this, SLOT(on_reset_button_clicked()));
-
-  // Layout for the filters row
-  QHBoxLayout *filters_row = new QHBoxLayout();
-  filters_row->addWidget(filter_label);
-  filters_row->addWidget(filter_selector_);
-  filters_row->addWidget(filter_text_);
-  filters_row->addWidget(apply_button);
-  filters_row->addWidget(reset_button);
+  filters_panel_ = new FiltersPanel(this);
 
   // Widget for the main charts tabbed area
   charts_container_ = new ChartsContainer();
 
   main_layout_ = new QVBoxLayout();
-  main_layout_->addLayout(filters_row);
+  main_layout_->addWidget(filters_panel_);
   main_layout_->addWidget(charts_container_);
 
   // We need to wrap the layout in a widget that includes everything.
@@ -120,25 +103,7 @@ void LCView::build_main_layout() {
   setCentralWidget(main_widget);
 }
 
-Portfolio *LCView::apply_filters_to_portfolio() {
-  if (!filter_selector_ || !filter_text_) {
-    qWarning("Cannot apply filters, the UI is not setup!");
-    return portfolio_;
-  }
-
-  // The NoteField is embedded in the QVariant attached to each element of the selector
-  Attributes::NoteField field = filter_selector_->currentData().value<Attributes::NoteField>();
-  QString value = filter_text_->text();
-  if (value.isEmpty())
-    // nothing to filter
-    return portfolio_;
-
-  Filter filter(field, value);
-
-  return portfolio_->filter({filter});
-}
-
-void LCView::refresh_charts() {
+void LCView::refresh_charts(Filter *filter) {
   if (!charts_container_) {
     qWarning("Charts container is nullptr, ignoring refresh");
     return;
@@ -150,10 +115,17 @@ void LCView::refresh_charts() {
     return;
   }
 
-  display_portfolio_ = apply_filters_to_portfolio();
+  display_portfolio_ = apply_filters_to_portfolio(portfolio_, filter);
   if (!display_portfolio_)
     qWarning("Resetting charts container because display portfolio is empty");
   charts_container_->update_displayed_portfolio(display_portfolio_);
+}
+
+Portfolio *LCView::apply_filters_to_portfolio(Portfolio* portfolio, Filter *filter) {
+  if (!portfolio || !filter)
+    return portfolio;
+
+  return portfolio->filter({*filter});
 }
 
 void LCView::on_actionExit_triggered() {
@@ -170,13 +142,4 @@ void LCView::on_actionAbout_triggered() {
                      "lcview: A better viewer for Lending Club notes \n" \
                      "\n" \
                      "Copyright (C) 2019 Marco Leogrande");
-}
-
-void LCView::on_apply_button_clicked() {
-  refresh_charts();
-}
-
-void LCView::on_reset_button_clicked() {
-  filter_text_->clear();
-  refresh_charts();
 }

@@ -25,6 +25,7 @@
 
 
 #include "chartscontainer.h"
+#include "filterspanel.h"
 #include "portfolio.h"
 
 namespace Ui {
@@ -38,6 +39,8 @@ class LCView : public QMainWindow
 public:
   explicit LCView(QWidget *parent = nullptr);
   ~LCView();
+  /* This method does not take ownership of the filter. */
+  void on_filter_updated(Filter *filter);
 
 private:
   Ui::LCView *ui_;
@@ -48,19 +51,16 @@ private:
   QVBoxLayout *main_layout_;
 
   // subcomponents and subwidgets
+  FiltersPanel *filters_panel_;
   ChartsContainer *charts_container_;
-  QComboBox *filter_selector_;
-  QLineEdit *filter_text_;
 
   void load_portfolio_from_file();
   void build_main_layout();
-  Portfolio *apply_filters_to_portfolio();
-  void refresh_charts();
+  void refresh_charts(Filter *filter);
+  static Portfolio* apply_filters_to_portfolio(Portfolio* portfolio, Filter *filter);
 
 private slots:
   void on_actionExit_triggered();
   void on_actionLoad_triggered();
   void on_actionAbout_triggered();
-  void on_apply_button_clicked();
-  void on_reset_button_clicked();
 };
