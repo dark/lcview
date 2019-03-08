@@ -56,6 +56,7 @@ FiltersPanel::FiltersPanel(LCView* parent)
   setLayout(filters_row);
 }
 
+
 void FiltersPanel::reset_view() {
   filter_text_->clear();
 }
@@ -75,6 +76,7 @@ void FiltersPanel::on_apply_button_clicked() {
   parent_->on_filter_updated(filter);
   delete filter;
 }
+
 
 void FiltersPanel::on_reset_button_clicked() {
   reset_view();

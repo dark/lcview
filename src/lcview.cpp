@@ -37,6 +37,7 @@ LCView::LCView(QWidget *parent)
   build_main_layout();
 }
 
+
 LCView::~LCView() {
   ChartsContainer *charts_container = charts_container_;
   charts_container_ = nullptr;
@@ -58,9 +59,11 @@ LCView::~LCView() {
   ui_ = nullptr;
 }
 
+
 void LCView::on_filter_updated(Filter *filter) {
   refresh_charts(filter);
 }
+
 
 void LCView::load_portfolio_from_file() {
   QString filename = QFileDialog::getOpenFileName(this, "Open portfolio file");
@@ -81,6 +84,7 @@ void LCView::load_portfolio_from_file() {
   }
 }
 
+
 void LCView::build_main_layout() {
   // Setup filters panel
   filters_panel_ = new FiltersPanel(this);
@@ -100,6 +104,7 @@ void LCView::build_main_layout() {
   setCentralWidget(main_widget);
 }
 
+
 void LCView::refresh_charts(Filter *filter) {
   if (!charts_container_) {
     qWarning("Charts container is nullptr, ignoring refresh");
@@ -118,6 +123,7 @@ void LCView::refresh_charts(Filter *filter) {
   charts_container_->update_displayed_portfolio(display_portfolio_);
 }
 
+
 Portfolio *LCView::apply_filters_to_portfolio(Portfolio* portfolio, Filter *filter) {
   if (!portfolio || !filter)
     return portfolio;
@@ -125,13 +131,16 @@ Portfolio *LCView::apply_filters_to_portfolio(Portfolio* portfolio, Filter *filt
   return portfolio->filter({*filter});
 }
 
+
 void LCView::on_actionExit_triggered() {
   QCoreApplication::quit();
 }
 
+
 void LCView::on_actionLoad_triggered() {
   LCView::load_portfolio_from_file();
 }
+
 
 void LCView::on_actionAbout_triggered() {
   QMessageBox::about(this,

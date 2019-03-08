@@ -43,6 +43,7 @@ int parse_term(QString s) {
   return s.toInt();
 }
 
+
 QString term_to_string(int term) {
   return QString::number(term);
 }
@@ -67,6 +68,7 @@ NoteStatus parse_status(QString s) {
     return NoteStatus::LATE_31_120;
   return NoteStatus::UNKNOWN;
 }
+
 
 QString status_to_string(NoteStatus status) {
   switch (status) {

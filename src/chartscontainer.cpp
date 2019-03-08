@@ -27,15 +27,18 @@ ChartsContainer::ChartsContainer()
   add_one_tab(new StatusDistributionChartTab(this), tr("Status distribution"));
 }
 
+
 void ChartsContainer::add_one_tab(ChartTab *tab, QString label) {
   tabs_.append(tab);
   addTab(tab, label);
 }
 
+
 void ChartsContainer::update_displayed_portfolio(Portfolio *portfolio) {
   for (ChartTab *tab: tabs_)
     tab->update_displayed_portfolio(portfolio);
 }
+
 
 ChartTab::ChartTab(QWidget *parent)
   : QWidget(parent), chart_(nullptr) {
@@ -45,6 +48,7 @@ ChartTab::ChartTab(QWidget *parent)
 
   setLayout(main_layout_);
 }
+
 
 void ChartTab::update_displayed_portfolio(Portfolio *portfolio) {
   if (!portfolio) {
@@ -58,6 +62,7 @@ void ChartTab::update_displayed_portfolio(Portfolio *portfolio) {
     qWarning("null chart was generated");
   set_chart(chart);
 }
+
 
 void ChartTab::set_chart(Chart *chart) {
   delete chart_;
