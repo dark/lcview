@@ -37,17 +37,17 @@ SOURCES += \
     src/filterspanel.cpp
 
 HEADERS += \
-    src/lcview.h \
-    src/note.h \
-    src/portfolio.h \
-    src/attributes.h \
-    src/filter.h \
-    src/charts.h \
-    src/aggregator.h \
-    src/charts-pvt.h \
-    src/chartscontainer.h \
-    src/chartscontainer-pvt.h \
-    src/filterspanel.h
+    src/include/aggregator.h \
+    src/include/attributes.h \
+    src/include/charts-pvt.h \
+    src/include/charts.h \
+    src/include/chartscontainer-pvt.h \
+    src/include/chartscontainer.h \
+    src/include/filter.h \
+    src/include/filterspanel.h \
+    src/include/lcview.h \
+    src/include/note.h \
+    src/include/portfolio.h
 
 FORMS += \
     src/lcview.ui
