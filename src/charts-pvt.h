@@ -95,12 +95,25 @@ template <class T>
 QtCharts::QPieSeries* create_pie_series(const QMap<T, int> &mappings, QString (*to_label)(T)) {
   QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
   const int total = values_total(mappings);
+  double tightness = 0.0;
+
   for (auto mapping: mappings.toStdMap()) {
     QString base_label = to_label(mapping.first);
     const int value = mapping.second;
+    const double ratio = double(value) / total;
 
     QString label = QString("%1 (%2 of %3)").arg(base_label).arg(value).arg(total);
-    series->append(label, value);
+    QtCharts::QPieSlice *slice = series->append(label, value);
+    if (ratio < 0.03) {
+      // Labels on slices smaller than 3% of the total need to compensate for extra tightness.
+      tightness = tightness + 0.1;
+      slice->setLabelArmLengthFactor(tightness);
+    } else {
+      // Reset tightness to its default value for larger slices. Slices with intermediate sizes (3 to 5%)
+      // add a a bit of extra tightness to the next slice.
+      tightness = ratio < 0.05 ? 0.1 : 0.0;
+      slice->setLabelArmLengthFactor(0.1);
+    }
   }
   series->setLabelsVisible(true);
   return series;
