@@ -186,7 +186,9 @@ QtCharts::QPieSeries* TermChart::create_series(Portfolio *portfolio) {
 // Helpers
 void append_to_series(QtCharts::QPieSeries *series, QString base_label,
                       const int value, const int total_value) {
-  series->append(base_label, value);
+  QString label = QString("%1 (%2 of %3)")
+      .arg(base_label).arg(value).arg(total_value);
+  series->append(label, value);
 }
 
 
