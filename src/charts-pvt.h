@@ -91,6 +91,22 @@ int values_total(const QMap<T, int> &values) {
   return total;
 }
 
-void append_to_series(QtCharts::QPieSeries *series, QString base_label, const int value, const int total_value);
+template <class T>
+QtCharts::QPieSeries* create_pie_series(const QMap<T, int> &mappings, QString (*to_label)(T)) {
+  QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
+  const int total = values_total(mappings);
+  for (auto mapping: mappings.toStdMap()) {
+    QString base_label = to_label(mapping.first);
+    const int value = mapping.second;
+
+    QString label = QString("%1 (%2 of %3)").arg(base_label).arg(value).arg(total);
+    series->append(label, value);
+  }
+  series->setLabelsVisible(true);
+  return series;
+}
+
+QString int_to_qstring(const int value);
+QString qstring_to_qstring(const QString qstring);
 
 }; // namespace Charts

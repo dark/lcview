@@ -91,12 +91,7 @@ void GradeChart::on_coarse_button_toggled(bool checked) {
 
 QtCharts::QPieSeries* GradeChart::create_series(Portfolio *portfolio, bool coarse) {
   QMap<QString, int> grades = Aggregator::grades(portfolio, coarse);
-  const int total = values_total(grades);
-
-  QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
-  for (auto grade: grades.toStdMap())
-    append_to_series(series, grade.first, grade.second, total);
-  series->setLabelsVisible(true);
+  QtCharts::QPieSeries *series = create_pie_series(grades, qstring_to_qstring);
 
   // Apply colors similar to those from the official website
   for (auto slice: series->slices()) {
@@ -136,14 +131,7 @@ StatusChart::~StatusChart() {
 
 QtCharts::QPieSeries* StatusChart::create_series(Portfolio *portfolio) {
   QMap<Attributes::NoteStatus, int> statuses = Aggregator::statuses(portfolio);
-  const int total = values_total(statuses);
-
-  QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
-  for (auto status: statuses.toStdMap())
-    append_to_series(series, Attributes::status_to_string(status.first), status.second, total);
-  series->setLabelsVisible(true);
-
-  return series;
+  return create_pie_series(statuses, Attributes::status_to_string);
 }
 
 
@@ -172,23 +160,18 @@ TermChart::~TermChart() {
 
 QtCharts::QPieSeries* TermChart::create_series(Portfolio *portfolio) {
   QMap<int, int> terms = Aggregator::terms(portfolio);
-  const int total = values_total(terms);
-
-  QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
-  for (auto term: terms.toStdMap())
-    append_to_series(series, QString::number(term.first), term.second, total);
-  series->setLabelsVisible(true);
-
-  return series;
+  return create_pie_series(terms, int_to_qstring);
 }
 
 
 // Helpers
-void append_to_series(QtCharts::QPieSeries *series, QString base_label,
-                      const int value, const int total_value) {
-  QString label = QString("%1 (%2 of %3)")
-      .arg(base_label).arg(value).arg(total_value);
-  series->append(label, value);
+QString int_to_qstring(const int value) {
+  return QString::number(value);
+}
+
+
+QString qstring_to_qstring(const QString qstring) {
+  return qstring;
 }
 
 
