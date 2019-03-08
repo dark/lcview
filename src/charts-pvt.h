@@ -81,4 +81,16 @@ private:
   static QtCharts::QPieSeries* create_series(Portfolio *portfolio);
 };
 
+
+// Helpers
+template <class T>
+int values_total(const QMap<T, int> &values) {
+  int total = 0;
+  for (auto i = values.cbegin(); i != values.cend(); ++i)
+    total += i.value();
+  return total;
+}
+
+void append_to_series(QtCharts::QPieSeries *series, QString base_label, const int value, const int total_value);
+
 }; // namespace Charts

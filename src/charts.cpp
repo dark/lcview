@@ -91,10 +91,11 @@ void GradeChart::on_coarse_button_toggled(bool checked) {
 
 QtCharts::QPieSeries* GradeChart::create_series(Portfolio *portfolio, bool coarse) {
   QMap<QString, int> grades = Aggregator::grades(portfolio, coarse);
+  const int total = values_total(grades);
 
   QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
   for (auto grade: grades.toStdMap())
-    series->append(grade.first, grade.second);
+    append_to_series(series, grade.first, grade.second, total);
   series->setLabelsVisible(true);
 
   // Apply colors similar to those from the official website
@@ -134,11 +135,12 @@ StatusChart::~StatusChart() {
 
 
 QtCharts::QPieSeries* StatusChart::create_series(Portfolio *portfolio) {
-  QMap<Attributes::NoteStatus, int> grades = Aggregator::statuses(portfolio);
+  QMap<Attributes::NoteStatus, int> statuses = Aggregator::statuses(portfolio);
+  const int total = values_total(statuses);
 
   QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
-  for (auto grade: grades.toStdMap())
-    series->append(Attributes::status_to_string(grade.first), grade.second);
+  for (auto status: statuses.toStdMap())
+    append_to_series(series, Attributes::status_to_string(status.first), status.second, total);
   series->setLabelsVisible(true);
 
   return series;
@@ -170,14 +172,23 @@ TermChart::~TermChart() {
 
 QtCharts::QPieSeries* TermChart::create_series(Portfolio *portfolio) {
   QMap<int, int> terms = Aggregator::terms(portfolio);
+  const int total = values_total(terms);
 
   QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
   for (auto term: terms.toStdMap())
-    series->append(QString::number(term.first), term.second);
+    append_to_series(series, QString::number(term.first), term.second, total);
   series->setLabelsVisible(true);
 
   return series;
 }
+
+
+// Helpers
+void append_to_series(QtCharts::QPieSeries *series, QString base_label,
+                      const int value, const int total_value) {
+  series->append(base_label, value);
+}
+
 
 // Creation functions
 Chart* grade_distribution(Portfolio *portfolio) {
