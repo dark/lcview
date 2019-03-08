@@ -58,4 +58,16 @@ QMap<Attributes::NoteStatus, int> statuses(Portfolio *p) {
   return statuses;
 }
 
+
+QMap<int, int> terms(Portfolio *p) {
+  QMap<int, int> terms;
+  if (!p)
+    return terms;
+
+  for (auto note = p->begin(); note != p->end(); ++note)
+    ++terms[note->get_term()];
+
+  return terms;
+}
+
 }; // namespace Aggregator

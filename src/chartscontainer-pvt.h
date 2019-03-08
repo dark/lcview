@@ -57,3 +57,11 @@ public:
 private:
   virtual Chart* generate_chart(Portfolio* portfolio) override;
 };
+
+
+class TermDistributionChartTab : public ChartTab {
+public:
+  explicit TermDistributionChartTab(QWidget *parent);
+private:
+  virtual Chart* generate_chart(Portfolio* portfolio) override;
+};

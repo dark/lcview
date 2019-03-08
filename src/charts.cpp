@@ -144,6 +144,41 @@ QtCharts::QPieSeries* StatusChart::create_series(Portfolio *portfolio) {
   return series;
 }
 
+
+// TermChart
+TermChart::TermChart(Portfolio *portfolio)
+  : portfolio_(portfolio) {
+  QtCharts::QPieSeries *series = create_series(portfolio_);
+
+  chart_ = new QtCharts::QChart();
+  chart_->addSeries(series);
+  chart_->setTitle("<h1>Note term distribution</h1>");
+  chart_->legend()->hide();
+  chart_->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
+
+  QtCharts::QChartView *chartView = new QtCharts::QChartView(chart_);
+  chartView->setRenderHint(QPainter::Antialiasing);
+
+  widget_ = chartView;
+}
+
+
+TermChart::~TermChart() {
+  // none of the pointers is owned by this class
+}
+
+
+QtCharts::QPieSeries* TermChart::create_series(Portfolio *portfolio) {
+  QMap<int, int> terms = Aggregator::terms(portfolio);
+
+  QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
+  for (auto term: terms.toStdMap())
+    series->append(QString::number(term.first), term.second);
+  series->setLabelsVisible(true);
+
+  return series;
+}
+
 // Creation functions
 Chart* grade_distribution(Portfolio *portfolio) {
   return new GradeChart(portfolio);
@@ -151,6 +186,10 @@ Chart* grade_distribution(Portfolio *portfolio) {
 
 Chart* status_distribution(Portfolio *portfolio) {
   return new StatusChart(portfolio);
+}
+
+Chart* term_distribution(Portfolio *portfolio) {
+  return new TermChart(portfolio);
 }
 
 } // namespace Charts

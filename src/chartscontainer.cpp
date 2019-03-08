@@ -25,6 +25,7 @@ ChartsContainer::ChartsContainer()
   : QTabWidget(nullptr) {
   add_one_tab(new GradeDistributionChartTab(this), tr("Grade distribution"));
   add_one_tab(new StatusDistributionChartTab(this), tr("Status distribution"));
+  add_one_tab(new TermDistributionChartTab(this), tr("Term distribution"));
 }
 
 
@@ -96,4 +97,11 @@ StatusDistributionChartTab::StatusDistributionChartTab(QWidget *parent)
 
 Chart* StatusDistributionChartTab::generate_chart(Portfolio* portfolio) {
   return Charts::status_distribution(portfolio);
+}
+
+TermDistributionChartTab::TermDistributionChartTab(QWidget *parent)
+  : ChartTab(parent) {}
+
+Chart* TermDistributionChartTab::generate_chart(Portfolio* portfolio) {
+  return Charts::term_distribution(portfolio);
 }
