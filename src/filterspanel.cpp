@@ -22,6 +22,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include "include/attributes.h"
+#include "include/filterspanel-pvt.h"
 #include "include/lcview.h"
 
 
@@ -38,8 +39,7 @@ FiltersPanel::FiltersPanel(LCView* parent)
   filter_selector_->insertItem(4, "Status",
                                QVariant::fromValue(Attributes::NoteField::STATUS));
 
-  filter_text_ = new QLineEdit;
-  filter_text_->setPlaceholderText("enter filter condition here");
+  filter_value_ = new FilterValueWidget;
 
   // Buttons and their actions
   QPushButton *apply_button = new QPushButton(tr("Apply"));
@@ -49,9 +49,10 @@ FiltersPanel::FiltersPanel(LCView* parent)
 
   // Layout for the filters row
   QHBoxLayout *filters_row = new QHBoxLayout();
+  filters_row->setContentsMargins(0, 0, 0, 0);
   filters_row->addWidget(filter_label);
   filters_row->addWidget(filter_selector_);
-  filters_row->addWidget(filter_text_);
+  filters_row->addWidget(filter_value_);
   filters_row->addWidget(apply_button);
   filters_row->addWidget(reset_button);
 
@@ -61,7 +62,7 @@ FiltersPanel::FiltersPanel(LCView* parent)
 
 void FiltersPanel::reset_view() {
   filter_selector_->setCurrentIndex(0);
-  filter_text_->clear();
+  filter_value_->clear();
 }
 
 
@@ -72,10 +73,7 @@ void FiltersPanel::on_apply_button_clicked() {
   QVariant data = filter_selector_->currentData();
   if (data.isValid()) {
     Attributes::NoteField field = data.value<Attributes::NoteField>();
-    QString value = filter_text_->text();
-
-    if (!value.isEmpty())
-      filter = new Filter(field, value);
+    filter = filter_value_->value(field);
   }
 
   parent_->on_filter_updated(filter);
@@ -86,4 +84,35 @@ void FiltersPanel::on_apply_button_clicked() {
 void FiltersPanel::on_reset_button_clicked() {
   reset_view();
   parent_->on_filter_updated(nullptr);
+}
+
+
+FilterValueWidget::FilterValueWidget() : QWidget(nullptr) {
+  // This container takes care of the placement of the children widgets
+  main_layout_ = new QVBoxLayout();
+  // Do not waste available space with margins
+  main_layout_->setContentsMargins(0, 0, 0, 0);
+
+  // The actual editable part
+  filter_text_ = new QLineEdit;
+  filter_text_->setPlaceholderText("enter filter condition here");
+
+  main_layout_->addWidget(filter_text_);
+
+  setLayout(main_layout_);
+}
+
+
+void FilterValueWidget::clear() {
+  filter_text_->clear();
+}
+
+
+Filter* FilterValueWidget::value(Attributes::NoteField field) const {
+  QString value = filter_text_->text();
+
+  if (value.isEmpty())
+    return nullptr;
+
+  return new Filter(field, value);
 }

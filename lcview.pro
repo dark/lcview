@@ -47,7 +47,8 @@ HEADERS += \
     src/include/filterspanel.h \
     src/include/lcview.h \
     src/include/note.h \
-    src/include/portfolio.h
+    src/include/portfolio.h \
+    src/include/filterspanel-pvt.h
 
 FORMS += \
     src/lcview.ui

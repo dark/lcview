@@ -18,30 +18,23 @@
 
 #pragma once
 
-#include <QComboBox>
 #include <QLineEdit>
+#include <QVBoxLayout>
 #include <QWidget>
+#include "attributes.h"
+#include "filter.h"
 
-// fwd decls
-class LCView;
-class FilterValueWidget;
 
-class FiltersPanel : public QWidget
-{
+class FilterValueWidget : public QWidget {
   Q_OBJECT
 
 public:
-  explicit FiltersPanel(LCView* parent);
+  FilterValueWidget();
 
-  void reset_view();
+  void clear();
+  Filter* value(Attributes::NoteField field) const;
 
 private:
-  LCView *parent_;
-  // subcomponents and subwidgets
-  QComboBox *filter_selector_;
-  FilterValueWidget *filter_value_;
-
-private slots:
-  void on_apply_button_clicked();
-  void on_reset_button_clicked();
+  QVBoxLayout *main_layout_;
+  QLineEdit *filter_text_;
 };
