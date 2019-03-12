@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "filter.h"
+#include "include/filter.h"
 
 Filter::Filter(Attributes::NoteField field, QString value)
   : field_(field), values_({value}) {}

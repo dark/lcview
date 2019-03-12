@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "note.h"
+#include "include/note.h"
 
 Note::Note () {}
 

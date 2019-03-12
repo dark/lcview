@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "charts.h"
+#include "include/charts.h"
 
 #include <QPieSeries>
 #include <QVBoxLayout>
@@ -24,8 +24,8 @@
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QFormLayout>
 
-#include "aggregator.h"
-#include "charts-pvt.h"
+#include "include/aggregator.h"
+#include "include/charts-pvt.h"
 
 Chart::Chart() {}
 Chart::~Chart() {}

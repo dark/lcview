@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "portfolio.h"
+#include "include/portfolio.h"
 
 #include <QFile>
 #include <QTextStream>

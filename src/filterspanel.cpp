@@ -16,13 +16,13 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "filterspanel.h"
+#include "include/filterspanel.h"
 
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
-#include "attributes.h"
-#include "lcview.h"
+#include "include/attributes.h"
+#include "include/lcview.h"
 
 
 FiltersPanel::FiltersPanel(LCView* parent)

@@ -16,9 +16,9 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "chartscontainer.h"
+#include "include/chartscontainer.h"
 
-#include "chartscontainer-pvt.h"
+#include "include/chartscontainer-pvt.h"
 
 
 ChartsContainer::ChartsContainer()
