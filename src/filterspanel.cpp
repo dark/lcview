@@ -150,11 +150,11 @@ Filter* FilterValueWidget::filter(Attributes::NoteField field) const {
     return nullptr;
   }
 
-  QString value = filter_value_component_->value();
-  if (value.isEmpty())
+  QStringList values = filter_value_component_->values();
+  if (values.isEmpty())
     return nullptr;
 
-  return new Filter(field, value);
+  return new Filter(field, values);
 }
 
 
@@ -186,6 +186,6 @@ QWidget* TextEditorComponent::widget() const {
 }
 
 
-QString TextEditorComponent::value() const {
-  return line_edit_->text();
+QStringList TextEditorComponent::values() const {
+  return QStringList(line_edit_->text());
 }

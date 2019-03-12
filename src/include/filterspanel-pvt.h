@@ -31,7 +31,7 @@ public:
   FilterValueComponent() = default;
   virtual ~FilterValueComponent() = default;
   virtual QWidget* widget() const = 0;
-  virtual QString value() const = 0;
+  virtual QStringList values() const = 0;
 };
 
 
@@ -41,7 +41,7 @@ public:
   TextEditorComponent();
   virtual ~TextEditorComponent();
   virtual QWidget* widget() const;
-  virtual QString value() const;
+  virtual QStringList values() const;
 
 private:
   QLineEdit *line_edit_;
