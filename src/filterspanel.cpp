@@ -187,5 +187,9 @@ QWidget* TextEditorComponent::widget() const {
 
 
 QStringList TextEditorComponent::values() const {
-  return QStringList(line_edit_->text());
+  QString value = line_edit_->text();
+  if (value.isEmpty())
+    // an empty value should be treated as being "no" value
+    return QStringList();
+  return QStringList(value);
 }
