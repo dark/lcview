@@ -59,6 +59,13 @@ ChartTab::ChartTab(QWidget *parent)
 
 ChartTab::~ChartTab() {
   delete chart_;
+  chart_ = nullptr;
+
+  QLayoutItem *old_widget = main_layout_->takeAt(0);
+  if (old_widget) {
+    delete old_widget->widget();
+    delete old_widget;
+  }
 }
 
 

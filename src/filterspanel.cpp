@@ -115,6 +115,11 @@ FilterValueWidget::FilterValueWidget() : QWidget(nullptr), filter_value_componen
 }
 
 
+FilterValueWidget::~FilterValueWidget() {
+  remove_filter_widget();
+}
+
+
 void FilterValueWidget::set_active_filter(Attributes::NoteField field) {
   remove_filter_widget();
 

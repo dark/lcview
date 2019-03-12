@@ -71,6 +71,7 @@ class FilterValueWidget : public QWidget {
 
 public:
   FilterValueWidget();
+  ~FilterValueWidget();
 
   void set_active_filter(Attributes::NoteField field);
   void clear_active_filter();
