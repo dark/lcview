@@ -58,9 +58,6 @@ ChartTab::ChartTab(QWidget *parent)
 
 
 ChartTab::~ChartTab() {
-  delete chart_;
-  chart_ = nullptr;
-
   QLayoutItem *old_widget = main_layout_->takeAt(0);
   if (old_widget) {
     delete old_widget->widget();
@@ -84,8 +81,7 @@ void ChartTab::update_displayed_portfolio(Portfolio *portfolio) {
 
 
 void ChartTab::set_chart(Chart *chart) {
-  delete chart_;
-  chart_ = chart;
+  chart_.reset(chart);
 
   QLayoutItem *old_widget = main_layout_->takeAt(0);
   if (old_widget) {

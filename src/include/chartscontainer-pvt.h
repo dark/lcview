@@ -37,7 +37,7 @@ public:
 private:
   QVBoxLayout *main_layout_;
 
-  Chart *chart_;
+  QScopedPointer<Chart> chart_;
 
   void set_chart(Chart *chart);
   virtual Chart* generate_chart(Portfolio* portfolio) = 0;
