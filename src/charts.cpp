@@ -19,7 +19,6 @@
 #include "include/charts.h"
 
 #include <QPieSeries>
-#include <QVBoxLayout>
 #include <QtCharts/QChartView>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QFormLayout>

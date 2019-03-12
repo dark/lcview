@@ -18,8 +18,6 @@
 
 #include "include/note.h"
 
-Note::Note () {}
-
 
 bool Note::add_attribute(QString key, QString value)
 {

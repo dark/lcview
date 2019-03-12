@@ -26,7 +26,7 @@
 
 class Note {
 public:
-  Note();
+  Note() = default;
   bool add_attribute(QString key, QString value);
   QString get_attribute(QString key) const;
 
