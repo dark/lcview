@@ -29,11 +29,13 @@ FiltersPanel::FiltersPanel(LCView* parent)
   : QWidget(nullptr), parent_(parent) {
   QLabel *filter_label = new QLabel(tr("Filter:"));
   filter_selector_ = new QComboBox;
-  filter_selector_->insertItem(1, "Grade",
+  filter_selector_->insertItem(1, "(none)",
+                               QVariant());
+  filter_selector_->insertItem(2, "Grade",
                                QVariant::fromValue(Attributes::NoteField::GRADE));
-  filter_selector_->insertItem(2, "Term",
+  filter_selector_->insertItem(3, "Term",
                                QVariant::fromValue(Attributes::NoteField::TERM));
-  filter_selector_->insertItem(3, "Status",
+  filter_selector_->insertItem(4, "Status",
                                QVariant::fromValue(Attributes::NoteField::STATUS));
 
   filter_text_ = new QLineEdit;
@@ -58,18 +60,23 @@ FiltersPanel::FiltersPanel(LCView* parent)
 
 
 void FiltersPanel::reset_view() {
+  filter_selector_->setCurrentIndex(0);
   filter_text_->clear();
 }
 
 
 void FiltersPanel::on_apply_button_clicked() {
-  // The NoteField is embedded in the QVariant attached to each element of the selector
-  Attributes::NoteField field = filter_selector_->currentData().value<Attributes::NoteField>();
-  QString value = filter_text_->text();
-
   Filter *filter = nullptr;
-  if (!value.isEmpty())
-    filter = new Filter(field, value);
+
+  // The NoteField is embedded in the QVariant attached to each element of the selector
+  QVariant data = filter_selector_->currentData();
+  if (data.isValid()) {
+    Attributes::NoteField field = data.value<Attributes::NoteField>();
+    QString value = filter_text_->text();
+
+    if (!value.isEmpty())
+      filter = new Filter(field, value);
+  }
 
   parent_->on_filter_updated(filter);
   delete filter;
