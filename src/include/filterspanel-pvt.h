@@ -61,7 +61,7 @@ public:
 
 private:
   QHBoxLayout *main_layout_;
-  FilterValueComponent *filter_text_;
+  FilterValueComponent *filter_value_;
 
   void remove_filter_widget();
 };

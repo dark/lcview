@@ -102,7 +102,7 @@ void FiltersPanel::on_reset_button_clicked() {
 }
 
 
-FilterValueWidget::FilterValueWidget() : QWidget(nullptr), filter_text_(nullptr) {
+FilterValueWidget::FilterValueWidget() : QWidget(nullptr), filter_value_(nullptr) {
   // This container takes care of the placement of the children widgets
   main_layout_ = new QHBoxLayout();
   // Do not waste available space with margins
@@ -129,9 +129,9 @@ void FilterValueWidget::set_active_filter(Attributes::NoteField field) {
     case Attributes::NoteField::GRADE:
     case Attributes::NoteField::TERM:
     case Attributes::NoteField::STATUS:
-      filter_text_ = new TextEditorComponent;
+      filter_value_ = new TextEditorComponent;
   }
-  main_layout_->addWidget(filter_text_->widget());
+  main_layout_->addWidget(filter_value_->widget());
 }
 
 
@@ -144,13 +144,13 @@ void FilterValueWidget::clear_active_filter() {
 
 
 Filter* FilterValueWidget::value(Attributes::NoteField field) const {
-  if (!filter_text_) {
+  if (!filter_value_) {
     qCritical("invalid state: filter text widget is null when filter '%s' is received",
               qUtf8Printable(Attributes::field_key(field)));
     return nullptr;
   }
 
-  QString value = filter_text_->value();
+  QString value = filter_value_->value();
   if (value.isEmpty())
     return nullptr;
 
@@ -159,8 +159,8 @@ Filter* FilterValueWidget::value(Attributes::NoteField field) const {
 
 
 void FilterValueWidget::remove_filter_widget() {
-  delete filter_text_;
-  filter_text_ = nullptr;
+  delete filter_value_;
+  filter_value_ = nullptr;
 
   QLayoutItem *old_widget = main_layout_->takeAt(0);
   if (old_widget) {
