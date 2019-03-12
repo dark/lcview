@@ -18,8 +18,8 @@
 
 #pragma once
 
+#include <QHBoxLayout>
 #include <QLineEdit>
-#include <QVBoxLayout>
 #include <QWidget>
 #include "attributes.h"
 #include "filter.h"
@@ -31,10 +31,14 @@ class FilterValueWidget : public QWidget {
 public:
   FilterValueWidget();
 
-  void clear();
+  void set_active_filter(Attributes::NoteField field);
+  void clear_active_filter();
   Filter* value(Attributes::NoteField field) const;
 
 private:
-  QVBoxLayout *main_layout_;
+  QHBoxLayout *main_layout_;
+  // filter-dependant widgets
   QLineEdit *filter_text_;
+
+  void remove_filter_widget();
 };

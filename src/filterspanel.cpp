@@ -38,6 +38,7 @@ FiltersPanel::FiltersPanel(LCView* parent)
                                QVariant::fromValue(Attributes::NoteField::TERM));
   filter_selector_->insertItem(4, "Status",
                                QVariant::fromValue(Attributes::NoteField::STATUS));
+  connect(filter_selector_, SIGNAL(activated(int)), this, SLOT(on_filter_selection_changed(int)));
 
   filter_value_ = new FilterValueWidget;
 
@@ -62,7 +63,21 @@ FiltersPanel::FiltersPanel(LCView* parent)
 
 void FiltersPanel::reset_view() {
   filter_selector_->setCurrentIndex(0);
-  filter_value_->clear();
+  filter_value_->clear_active_filter();
+}
+
+
+void FiltersPanel::on_filter_selection_changed(int /* unused */) {
+  if (!filter_selector_ || !filter_value_) {
+    qCritical("Filter selection changed while the UI is not setup");
+    return;
+  }
+
+  QVariant data = filter_selector_->currentData();
+  if (data.isValid())
+    filter_value_->set_active_filter(data.value<Attributes::NoteField>());
+  else
+    filter_value_->clear_active_filter();
 }
 
 
@@ -87,32 +102,60 @@ void FiltersPanel::on_reset_button_clicked() {
 }
 
 
-FilterValueWidget::FilterValueWidget() : QWidget(nullptr) {
+FilterValueWidget::FilterValueWidget() : QWidget(nullptr), filter_text_(nullptr) {
   // This container takes care of the placement of the children widgets
-  main_layout_ = new QVBoxLayout();
+  main_layout_ = new QHBoxLayout();
   // Do not waste available space with margins
   main_layout_->setContentsMargins(0, 0, 0, 0);
+
+  // This stretchable space will be replaced by the actual value widget as needed
+  main_layout_->addStretch();
+
+  setLayout(main_layout_);
+}
+
+
+void FilterValueWidget::set_active_filter(Attributes::NoteField field) {
+  remove_filter_widget();
 
   // The actual editable part
   filter_text_ = new QLineEdit;
   filter_text_->setPlaceholderText("enter filter condition here");
 
   main_layout_->addWidget(filter_text_);
-
-  setLayout(main_layout_);
 }
 
 
-void FilterValueWidget::clear() {
-  filter_text_->clear();
+void FilterValueWidget::clear_active_filter() {
+  remove_filter_widget();
+
+  // Just put a spacer.
+  main_layout_->addStretch();
 }
 
 
 Filter* FilterValueWidget::value(Attributes::NoteField field) const {
-  QString value = filter_text_->text();
+  if (!filter_text_) {
+    qCritical("invalid state: filter text widget is null when filter '%s' is received",
+              qUtf8Printable(Attributes::field_key(field)));
+    return nullptr;
+  }
 
+  QString value = filter_text_->text();
   if (value.isEmpty())
     return nullptr;
 
   return new Filter(field, value);
+}
+
+
+void FilterValueWidget::remove_filter_widget() {
+  QLayoutItem *old_widget = main_layout_->takeAt(0);
+  if (old_widget) {
+    delete old_widget->widget();
+    delete old_widget;
+  }
+
+  // Make all optional widgets null
+  filter_text_ = nullptr;
 }

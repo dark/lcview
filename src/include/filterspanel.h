@@ -42,6 +42,7 @@ private:
   FilterValueWidget *filter_value_;
 
 private slots:
+  void on_filter_selection_changed(int index);
   void on_apply_button_clicked();
   void on_reset_button_clicked();
 };
