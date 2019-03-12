@@ -119,6 +119,10 @@ void FilterValueWidget::set_active_filter(Attributes::NoteField field) {
   remove_filter_widget();
 
   switch (field) {
+    case Attributes::NoteField::TERM:
+      filter_value_component_ = new TermSelectorComponent;
+      break;
+
     case Attributes::NoteField::INTEREST:
     case Attributes::NoteField::ADDRESS_STATE:
     case Attributes::NoteField::LOAN_ISSUE_DATE:
@@ -127,9 +131,9 @@ void FilterValueWidget::set_active_filter(Attributes::NoteField field) {
       // fallthrough on purpose
       [[clang::fallthrough]];
     case Attributes::NoteField::GRADE:
-    case Attributes::NoteField::TERM:
     case Attributes::NoteField::STATUS:
       filter_value_component_ = new TextEditorComponent;
+      break;
   }
   main_layout_->addWidget(filter_value_component_->widget());
 }
@@ -167,6 +171,43 @@ void FilterValueWidget::remove_filter_widget() {
     delete old_widget->widget();
     delete old_widget;
   }
+}
+
+
+TermSelectorComponent::TermSelectorComponent() {
+  term_36_checkbox_ = new QCheckBox("36 months");
+  term_60_checkbox_ = new QCheckBox("60 months");
+
+  // Add wrapper layout to put everything together
+  QHBoxLayout *mainLayout = new QHBoxLayout();
+  mainLayout->setContentsMargins(0, 0, 0, 0);
+  mainLayout->addWidget(term_36_checkbox_);
+  mainLayout->addWidget(term_60_checkbox_);
+  mainLayout->addStretch();
+  QWidget *mainWidget = new QWidget();
+  mainWidget->setLayout(mainLayout);
+
+  widget_ = mainWidget;
+}
+
+
+TermSelectorComponent::~TermSelectorComponent() {
+  // none of the pointers is owned by this class
+}
+
+
+QWidget* TermSelectorComponent::widget() const {
+  return widget_;
+}
+
+
+QStringList TermSelectorComponent::values() const {
+  QStringList values;
+  if (term_36_checkbox_->isChecked())
+    values.append("36");
+  if (term_60_checkbox_->isChecked())
+    values.append("60");
+  return values;
 }
 
 

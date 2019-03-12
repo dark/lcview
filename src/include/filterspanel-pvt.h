@@ -21,6 +21,7 @@
 #include <QHBoxLayout>
 #include <QLineEdit>
 #include <QWidget>
+#include <QtWidgets/QCheckBox>
 #include "attributes.h"
 #include "filter.h"
 
@@ -32,6 +33,22 @@ public:
   virtual ~FilterValueComponent() = default;
   virtual QWidget* widget() const = 0;
   virtual QStringList values() const = 0;
+};
+
+
+// Allows the user to select a term
+class TermSelectorComponent : public FilterValueComponent {
+public:
+  TermSelectorComponent();
+  virtual ~TermSelectorComponent();
+  virtual QWidget* widget() const;
+  virtual QStringList values() const;
+
+private:
+  QWidget *widget_;
+
+  // subcomponents and subwidgets
+  QCheckBox *term_36_checkbox_, *term_60_checkbox_;
 };
 
 
