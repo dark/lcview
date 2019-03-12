@@ -24,8 +24,8 @@
 
 class Chart : public QObject {
 public:
-  Chart();
-  virtual ~Chart();
+  Chart() = default;
+  virtual ~Chart() = default;
   virtual QWidget* widget() = 0;
 };
 

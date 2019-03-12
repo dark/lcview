@@ -27,8 +27,6 @@
 #include "include/aggregator.h"
 #include "include/charts-pvt.h"
 
-Chart::Chart() {}
-Chart::~Chart() {}
 
 namespace Charts {
 
