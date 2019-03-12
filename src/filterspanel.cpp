@@ -118,11 +118,20 @@ FilterValueWidget::FilterValueWidget() : QWidget(nullptr), filter_text_(nullptr)
 void FilterValueWidget::set_active_filter(Attributes::NoteField field) {
   remove_filter_widget();
 
-  // The actual editable part
-  filter_text_ = new QLineEdit;
-  filter_text_->setPlaceholderText("enter filter condition here");
-
-  main_layout_->addWidget(filter_text_);
+  switch (field) {
+    case Attributes::NoteField::INTEREST:
+    case Attributes::NoteField::ADDRESS_STATE:
+    case Attributes::NoteField::LOAN_ISSUE_DATE:
+      qWarning("Field '%s' unsupported, displaying generic text editor instead",
+               qUtf8Printable(Attributes::field_key(field)));
+      // fallthrough on purpose
+      [[clang::fallthrough]];
+    case Attributes::NoteField::GRADE:
+    case Attributes::NoteField::TERM:
+    case Attributes::NoteField::STATUS:
+      filter_text_ = new TextEditorComponent;
+  }
+  main_layout_->addWidget(filter_text_->widget());
 }
 
 
@@ -141,7 +150,7 @@ Filter* FilterValueWidget::value(Attributes::NoteField field) const {
     return nullptr;
   }
 
-  QString value = filter_text_->text();
+  QString value = filter_text_->value();
   if (value.isEmpty())
     return nullptr;
 
@@ -150,12 +159,33 @@ Filter* FilterValueWidget::value(Attributes::NoteField field) const {
 
 
 void FilterValueWidget::remove_filter_widget() {
+  delete filter_text_;
+  filter_text_ = nullptr;
+
   QLayoutItem *old_widget = main_layout_->takeAt(0);
   if (old_widget) {
     delete old_widget->widget();
     delete old_widget;
   }
+}
 
-  // Make all optional widgets null
-  filter_text_ = nullptr;
+
+TextEditorComponent::TextEditorComponent() {
+  line_edit_ = new QLineEdit;
+  line_edit_->setPlaceholderText("enter filter condition here");
+}
+
+
+TextEditorComponent::~TextEditorComponent() {
+  // none of the pointers is owned by this class
+}
+
+
+QWidget* TextEditorComponent::widget() const {
+  return line_edit_;
+}
+
+
+QString TextEditorComponent::value() const {
+  return line_edit_->text();
 }

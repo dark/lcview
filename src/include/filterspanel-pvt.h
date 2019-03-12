@@ -25,6 +25,30 @@
 #include "filter.h"
 
 
+// Base class for all components that can be used to select the value of the filter
+class FilterValueComponent : public QObject {
+public:
+  FilterValueComponent() = default;
+  virtual ~FilterValueComponent() = default;
+  virtual QWidget* widget() const = 0;
+  virtual QString value() const = 0;
+};
+
+
+// Uses a simple text editor to enter the requested information
+class TextEditorComponent : public FilterValueComponent {
+public:
+  TextEditorComponent();
+  virtual ~TextEditorComponent();
+  virtual QWidget* widget() const;
+  virtual QString value() const;
+
+private:
+  QLineEdit *line_edit_;
+};
+
+
+// Wrapper around all available, filter-dependant widgets
 class FilterValueWidget : public QWidget {
   Q_OBJECT
 
@@ -37,8 +61,7 @@ public:
 
 private:
   QHBoxLayout *main_layout_;
-  // filter-dependant widgets
-  QLineEdit *filter_text_;
+  FilterValueComponent *filter_text_;
 
   void remove_filter_widget();
 };
