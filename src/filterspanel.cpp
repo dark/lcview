@@ -68,10 +68,8 @@ void FiltersPanel::on_apply_button_clicked() {
   QString value = filter_text_->text();
 
   Filter *filter = nullptr;
-  if (!value.isEmpty()) {
-    // nothing to filter
+  if (!value.isEmpty())
     filter = new Filter(field, value);
-  }
 
   parent_->on_filter_updated(filter);
   delete filter;
