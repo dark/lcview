@@ -57,11 +57,11 @@ public:
 
   void set_active_filter(Attributes::NoteField field);
   void clear_active_filter();
-  Filter* value(Attributes::NoteField field) const;
+  Filter* filter(Attributes::NoteField field) const;
 
 private:
   QHBoxLayout *main_layout_;
-  FilterValueComponent *filter_value_;
+  FilterValueComponent *filter_value_component_;
 
   void remove_filter_widget();
 };

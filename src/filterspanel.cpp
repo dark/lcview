@@ -88,7 +88,7 @@ void FiltersPanel::on_apply_button_clicked() {
   QVariant data = filter_selector_->currentData();
   if (data.isValid()) {
     Attributes::NoteField field = data.value<Attributes::NoteField>();
-    filter = filter_value_->value(field);
+    filter = filter_value_->filter(field);
   }
 
   parent_->on_filter_updated(filter);
@@ -102,7 +102,7 @@ void FiltersPanel::on_reset_button_clicked() {
 }
 
 
-FilterValueWidget::FilterValueWidget() : QWidget(nullptr), filter_value_(nullptr) {
+FilterValueWidget::FilterValueWidget() : QWidget(nullptr), filter_value_component_(nullptr) {
   // This container takes care of the placement of the children widgets
   main_layout_ = new QHBoxLayout();
   // Do not waste available space with margins
@@ -129,9 +129,9 @@ void FilterValueWidget::set_active_filter(Attributes::NoteField field) {
     case Attributes::NoteField::GRADE:
     case Attributes::NoteField::TERM:
     case Attributes::NoteField::STATUS:
-      filter_value_ = new TextEditorComponent;
+      filter_value_component_ = new TextEditorComponent;
   }
-  main_layout_->addWidget(filter_value_->widget());
+  main_layout_->addWidget(filter_value_component_->widget());
 }
 
 
@@ -143,14 +143,14 @@ void FilterValueWidget::clear_active_filter() {
 }
 
 
-Filter* FilterValueWidget::value(Attributes::NoteField field) const {
-  if (!filter_value_) {
+Filter* FilterValueWidget::filter(Attributes::NoteField field) const {
+  if (!filter_value_component_) {
     qCritical("invalid state: filter text widget is null when filter '%s' is received",
               qUtf8Printable(Attributes::field_key(field)));
     return nullptr;
   }
 
-  QString value = filter_value_->value();
+  QString value = filter_value_component_->value();
   if (value.isEmpty())
     return nullptr;
 
@@ -159,8 +159,8 @@ Filter* FilterValueWidget::value(Attributes::NoteField field) const {
 
 
 void FilterValueWidget::remove_filter_widget() {
-  delete filter_value_;
-  filter_value_ = nullptr;
+  delete filter_value_component_;
+  filter_value_component_ = nullptr;
 
   QLayoutItem *old_widget = main_layout_->takeAt(0);
   if (old_widget) {
