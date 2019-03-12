@@ -30,7 +30,7 @@ public:
   Filter(Attributes::NoteField field, QString value);
   Filter(Attributes::NoteField field, QStringList values);
 
-  bool match(Note note) const;
+  bool match(const Note &note) const;
 
 private:
   Attributes::NoteField field_;

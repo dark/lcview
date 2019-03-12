@@ -30,6 +30,7 @@ class ChartTab : public QWidget {
 
 public:
   explicit ChartTab(QWidget *parent);
+  ~ChartTab();
 
   virtual void update_displayed_portfolio(Portfolio* portfolio);
 

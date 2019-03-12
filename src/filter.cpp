@@ -26,7 +26,7 @@ Filter::Filter(Attributes::NoteField field, QStringList values)
   : field_(field), values_(QSet<QString>::fromList(values)) {}
 
 
-bool Filter::match(Note note) const {
+bool Filter::match(const Note &note) const {
   QString attribute = note.get_attribute(Attributes::field_key(field_));
   return values_.contains(attribute);
 }

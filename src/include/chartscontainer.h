@@ -30,6 +30,7 @@ class ChartsContainer : public QTabWidget
 
 public:
   ChartsContainer();
+  ~ChartsContainer();
 
   void update_displayed_portfolio(Portfolio* portfolio);
 

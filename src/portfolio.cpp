@@ -153,7 +153,7 @@ Portfolio* Portfolio::filter(QList<Filter> filters) {
   Portfolio *filtered = new Portfolio;
   filtered->attribute_names_ = this->attribute_names_;
 
-  for (Note note: this->notes_) {
+  for (const Note &note: this->notes_) {
     bool matches = true;
 
     // Each note must match all provided filters.

@@ -29,6 +29,12 @@ ChartsContainer::ChartsContainer()
 }
 
 
+ChartsContainer::~ChartsContainer() {
+  for (ChartTab *tab: tabs_)
+    delete tab;
+}
+
+
 void ChartsContainer::add_one_tab(ChartTab *tab, QString label) {
   tabs_.append(tab);
   addTab(tab, label);
@@ -48,6 +54,11 @@ ChartTab::ChartTab(QWidget *parent)
   main_layout_->addStretch();
 
   setLayout(main_layout_);
+}
+
+
+ChartTab::~ChartTab() {
+  delete chart_;
 }
 
 

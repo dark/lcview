@@ -47,13 +47,13 @@ LCView::~LCView() {
   filters_panel_ = nullptr;
   delete filters_panel;
 
-  // Do not delete this - it is only a "view" of the general portfolio, that will take care of cleanup
+  if (display_portfolio_ != portfolio_)
+    // If no filter was applied, both pointers point at the same object
+    delete display_portfolio_;
   display_portfolio_ = nullptr;
 
-  Portfolio *portfolio = portfolio_;
+  delete portfolio_;
   portfolio_ = nullptr;
-  refresh_charts(nullptr);
-  delete portfolio;
 
   delete ui_;
   ui_ = nullptr;
