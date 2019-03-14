@@ -44,6 +44,7 @@ FiltersPanel::FiltersPanel(LCView* parent)
   filters_row->setContentsMargins(0, 0, 0, 0);
   filters_row->addWidget(filter_label);
   filters_row->addWidget(filter_element_);
+  filters_row->addStretch();
   filters_row->addWidget(apply_button);
   filters_row->addWidget(reset_button);
 

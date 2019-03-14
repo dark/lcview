@@ -83,9 +83,6 @@ FilterValueWidget::FilterValueWidget() : QWidget(nullptr), filter_value_componen
   // Do not waste available space with margins
   main_layout_->setContentsMargins(0, 0, 0, 0);
 
-  // This stretchable space will be replaced by the actual value widget as needed
-  main_layout_->addStretch();
-
   setLayout(main_layout_);
 }
 
@@ -121,9 +118,6 @@ void FilterValueWidget::set_active_filter(Attributes::NoteField field) {
 
 void FilterValueWidget::clear_active_filter() {
   remove_filter_widget();
-
-  // Just put a spacer.
-  main_layout_->addStretch();
 }
 
 
@@ -163,7 +157,6 @@ TermSelectorComponent::TermSelectorComponent() {
   mainLayout->setContentsMargins(0, 0, 0, 0);
   mainLayout->addWidget(term_36_checkbox_);
   mainLayout->addWidget(term_60_checkbox_);
-  mainLayout->addStretch();
   QWidget *mainWidget = new QWidget();
   mainWidget->setLayout(mainLayout);
 
