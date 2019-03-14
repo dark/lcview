@@ -18,26 +18,28 @@
 
 #pragma once
 
-#include <QLineEdit>
+#include <QComboBox>
 #include <QWidget>
-#include "filterelement.h"
+#include "filter.h"
 
 // fwd decls
-class LCView;
+class FilterValueWidget;
 
-class FiltersPanel : public QWidget {
+class FilterElement : public QWidget {
   Q_OBJECT
 
 public:
-  explicit FiltersPanel(LCView* parent);
+  FilterElement();
 
   void reset_view();
 
+  Filter* get_filter();
+
 private:
-  LCView *parent_;
-  FilterElement *filter_element_;
+  // subcomponents and subwidgets
+  QComboBox *filter_selector_;
+  FilterValueWidget *filter_value_;
 
 private slots:
-  void on_apply_button_clicked();
-  void on_reset_button_clicked();
+  void on_filter_selection_changed(int index);
 };

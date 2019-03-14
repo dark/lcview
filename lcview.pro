@@ -34,7 +34,8 @@ SOURCES += \
     src/aggregator.cpp \
     src/chartscontainer.cpp \
     src/attributes.cpp \
-    src/filterspanel.cpp
+    src/filterspanel.cpp \
+    src/filterelement.cpp
 
 HEADERS += \
     src/include/aggregator.h \
@@ -48,7 +49,8 @@ HEADERS += \
     src/include/lcview.h \
     src/include/note.h \
     src/include/portfolio.h \
-    src/include/filterspanel-pvt.h
+    src/include/filterelement.h \
+    src/include/filterelement-pvt.h
 
 FORMS += \
     src/lcview.ui
