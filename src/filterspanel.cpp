@@ -30,38 +30,49 @@ FiltersPanel::FiltersPanel(LCView* parent)
   // Label for the row
   QLabel *filter_label = new QLabel(tr("Filter:"));
 
-  // Element handling the filter
-  filter_element_ = new FilterElement();
-
   // Buttons and their actions
+  QPushButton *plus_button = new QPushButton(tr("+"));
+  plus_button->setFixedWidth(20);
   QPushButton *apply_button = new QPushButton(tr("Apply"));
   QPushButton *reset_button = new QPushButton(tr("Reset"));
+  connect(plus_button, SIGNAL(clicked()), this, SLOT(on_plus_button_clicked()));
   connect(apply_button, SIGNAL(clicked()), this, SLOT(on_apply_button_clicked()));
   connect(reset_button, SIGNAL(clicked()), this, SLOT(on_reset_button_clicked()));
 
   // Layout for the filters row
-  QHBoxLayout *filters_row = new QHBoxLayout();
-  filters_row->setContentsMargins(0, 0, 0, 0);
-  filters_row->addWidget(filter_label);
-  filters_row->addWidget(filter_element_);
-  filters_row->addStretch();
-  filters_row->addWidget(apply_button);
-  filters_row->addWidget(reset_button);
+  filters_row_ = new QHBoxLayout();
+  filters_row_->setContentsMargins(0, 0, 0, 0);
+  filters_row_->addWidget(filter_label);
+  filters_row_->addWidget(plus_button);
+  filters_row_->addStretch();
+  filters_row_->addWidget(apply_button);
+  filters_row_->addWidget(reset_button);
 
-  setLayout(filters_row);
+  setLayout(filters_row_);
 }
 
 
 void FiltersPanel::reset_view() {
-  filter_element_->reset_view();
+  for (auto element: filter_elements_)
+    element->reset_view();
+}
+
+
+void FiltersPanel::on_plus_button_clicked() {
+  // Add new filter at the end of the other filters
+  FilterElement *filter_element = new FilterElement();
+  filter_elements_.append(filter_element);
+  filters_row_->insertWidget(filter_elements_.size(), filter_element);
 }
 
 
 void FiltersPanel::on_apply_button_clicked() {
   QList<Filter> filters;
-  std::optional<Filter> filter = filter_element_->get_filter();
-  if (filter.has_value())
-    filters.append(*filter);
+  for (auto element: filter_elements_) {
+    std::optional<Filter> filter = element->get_filter();
+    if (filter.has_value())
+      filters.append(*filter);
+  }
   parent_->on_filter_update(filters);
 }
 

@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include <QHBoxLayout>
 #include <QLineEdit>
 #include <QWidget>
 #include "filterelement.h"
@@ -35,9 +36,11 @@ public:
 
 private:
   LCView *parent_;
-  FilterElement *filter_element_;
+  QList<FilterElement*> filter_elements_;
+  QHBoxLayout *filters_row_;
 
 private slots:
+  void on_plus_button_clicked();
   void on_apply_button_clicked();
   void on_reset_button_clicked();
 };
