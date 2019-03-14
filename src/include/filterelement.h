@@ -33,7 +33,7 @@ public:
 
   void reset_view();
 
-  Filter* get_filter();
+  std::optional<Filter> get_filter();
 
 private:
   // subcomponents and subwidgets

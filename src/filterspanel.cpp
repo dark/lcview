@@ -58,11 +58,10 @@ void FiltersPanel::reset_view() {
 
 void FiltersPanel::on_apply_button_clicked() {
   QList<Filter> filters;
-  Filter *filter = filter_element_->get_filter();
-  if (filter)
+  std::optional<Filter> filter = filter_element_->get_filter();
+  if (filter.has_value())
     filters.append(*filter);
   parent_->on_filter_update(filters);
-  delete filter;
 }
 
 

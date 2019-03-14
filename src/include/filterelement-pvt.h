@@ -75,7 +75,7 @@ public:
 
   void set_active_filter(Attributes::NoteField field);
   void clear_active_filter();
-  Filter* filter(Attributes::NoteField field) const;
+  std::optional<Filter> get_filter(Attributes::NoteField field) const;
 
 private:
   QHBoxLayout *main_layout_;

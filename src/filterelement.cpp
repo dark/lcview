@@ -52,17 +52,14 @@ void FilterElement::reset_view() {
 }
 
 
-Filter *FilterElement::get_filter() {
-  Filter *filter = nullptr;
-
+std::optional<Filter> FilterElement::get_filter() {
   // The NoteField is embedded in the QVariant attached to each element of the selector
   QVariant data = filter_selector_->currentData();
-  if (data.isValid()) {
-    Attributes::NoteField field = data.value<Attributes::NoteField>();
-    filter = filter_value_->filter(field);
-  }
+  if (!data.isValid())
+    return {};
 
-  return filter;
+  Attributes::NoteField field = data.value<Attributes::NoteField>();
+  return filter_value_->get_filter(field);
 }
 
 
@@ -130,18 +127,18 @@ void FilterValueWidget::clear_active_filter() {
 }
 
 
-Filter* FilterValueWidget::filter(Attributes::NoteField field) const {
+std::optional<Filter> FilterValueWidget::get_filter(Attributes::NoteField field) const {
   if (!filter_value_component_) {
     qCritical("invalid state: filter text widget is null when filter '%s' is received",
               qUtf8Printable(Attributes::field_key(field)));
-    return nullptr;
+    return {};
   }
 
   QStringList values = filter_value_component_->values();
   if (values.isEmpty())
-    return nullptr;
+    return {};
 
-  return new Filter(field, values);
+  return Filter(field, values);
 }
 
 
