@@ -37,8 +37,8 @@ class LCView : public QMainWindow
 public:
   explicit LCView(QWidget *parent = nullptr);
   ~LCView();
-  /* This method does not take ownership of the filter. */
-  void on_filter_updated(Filter *filter);
+
+  void on_filter_update(QList<Filter> filters);
 
 private:
   Ui::LCView *ui_;
@@ -54,8 +54,8 @@ private:
 
   void load_portfolio_from_file();
   void build_main_layout();
-  void refresh_charts(Filter *filter);
-  static Portfolio* apply_filters_to_portfolio(Portfolio* portfolio, Filter *filter);
+  void refresh_charts(QList<Filter> filters);
+  static Portfolio* apply_filters_to_portfolio(Portfolio* portfolio, QList<Filter> filters);
 
 private slots:
   void on_actionExit_triggered();

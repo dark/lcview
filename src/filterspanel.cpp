@@ -57,13 +57,16 @@ void FiltersPanel::reset_view() {
 
 
 void FiltersPanel::on_apply_button_clicked() {
+  QList<Filter> filters;
   Filter *filter = filter_element_->get_filter();
-  parent_->on_filter_updated(filter);
+  if (filter)
+    filters.append(*filter);
+  parent_->on_filter_update(filters);
   delete filter;
 }
 
 
 void FiltersPanel::on_reset_button_clicked() {
   reset_view();
-  parent_->on_filter_updated(nullptr);
+  parent_->on_filter_update(QList<Filter>());
 }

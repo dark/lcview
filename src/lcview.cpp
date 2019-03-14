@@ -60,8 +60,8 @@ LCView::~LCView() {
 }
 
 
-void LCView::on_filter_updated(Filter *filter) {
-  refresh_charts(filter);
+void LCView::on_filter_update(QList<Filter> filters) {
+  refresh_charts(filters);
 }
 
 
@@ -77,7 +77,7 @@ void LCView::load_portfolio_from_file() {
     Portfolio *old_portfolio = portfolio_;
     portfolio_ = p;
     filters_panel_->reset_view();
-    refresh_charts(nullptr);
+    refresh_charts(QList<Filter>());
     delete old_portfolio;
   } else {
     QMessageBox::warning(this, "Failed to load portfolio", "Failed to load portfolio from file: " + filename);
@@ -105,7 +105,7 @@ void LCView::build_main_layout() {
 }
 
 
-void LCView::refresh_charts(Filter *filter) {
+void LCView::refresh_charts(QList<Filter> filters) {
   if (!charts_container_) {
     qWarning("Charts container is nullptr, ignoring refresh");
     return;
@@ -117,18 +117,18 @@ void LCView::refresh_charts(Filter *filter) {
     return;
   }
 
-  display_portfolio_ = apply_filters_to_portfolio(portfolio_, filter);
+  display_portfolio_ = apply_filters_to_portfolio(portfolio_, filters);
   if (!display_portfolio_)
     qWarning("Resetting charts container because display portfolio is empty");
   charts_container_->update_displayed_portfolio(display_portfolio_);
 }
 
 
-Portfolio *LCView::apply_filters_to_portfolio(Portfolio* portfolio, Filter *filter) {
-  if (!portfolio || !filter)
+Portfolio *LCView::apply_filters_to_portfolio(Portfolio* portfolio, QList<Filter> filters) {
+  if (!portfolio || filters.isEmpty())
     return portfolio;
 
-  return portfolio->filter({*filter});
+  return portfolio->filter(filters);
 }
 
 
