@@ -20,6 +20,7 @@
 
 #include <QHBoxLayout>
 #include <QLineEdit>
+#include <QPushButton>
 #include <QWidget>
 #include "filterelement.h"
 
@@ -38,6 +39,10 @@ private:
   LCView *parent_;
   QList<FilterElement*> filter_elements_;
   QHBoxLayout *filters_row_;
+
+  // subcomponents and subwidgets
+  QPushButton *apply_button_;
+  QPushButton *reset_button_;
 
 private slots:
   void on_plus_button_clicked();

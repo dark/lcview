@@ -33,11 +33,13 @@ FiltersPanel::FiltersPanel(LCView* parent)
   // Buttons and their actions
   QPushButton *plus_button = new QPushButton(tr("+"));
   plus_button->setFixedWidth(20);
-  QPushButton *apply_button = new QPushButton(tr("Apply"));
-  QPushButton *reset_button = new QPushButton(tr("Reset"));
+  apply_button_ = new QPushButton(tr("Apply"));
+  apply_button_->setEnabled(false);
+  reset_button_ = new QPushButton(tr("Reset"));
+  reset_button_->setEnabled(false);
   connect(plus_button, SIGNAL(clicked()), this, SLOT(on_plus_button_clicked()));
-  connect(apply_button, SIGNAL(clicked()), this, SLOT(on_apply_button_clicked()));
-  connect(reset_button, SIGNAL(clicked()), this, SLOT(on_reset_button_clicked()));
+  connect(apply_button_, SIGNAL(clicked()), this, SLOT(on_apply_button_clicked()));
+  connect(reset_button_, SIGNAL(clicked()), this, SLOT(on_reset_button_clicked()));
 
   // Layout for the filters row
   filters_row_ = new QHBoxLayout();
@@ -45,8 +47,8 @@ FiltersPanel::FiltersPanel(LCView* parent)
   filters_row_->addWidget(filter_label);
   filters_row_->addWidget(plus_button);
   filters_row_->addStretch();
-  filters_row_->addWidget(apply_button);
-  filters_row_->addWidget(reset_button);
+  filters_row_->addWidget(apply_button_);
+  filters_row_->addWidget(reset_button_);
 
   setLayout(filters_row_);
 }
@@ -58,6 +60,9 @@ void FiltersPanel::reset_filters() {
     delete element;
   }
   filter_elements_.clear();
+
+  apply_button_->setEnabled(false);
+  reset_button_->setEnabled(false);
 }
 
 
@@ -66,6 +71,9 @@ void FiltersPanel::on_plus_button_clicked() {
   FilterElement *filter_element = new FilterElement();
   filter_elements_.append(filter_element);
   filters_row_->insertWidget(filter_elements_.size(), filter_element);
+
+  apply_button_->setEnabled(true);
+  reset_button_->setEnabled(true);
 }
 
 
