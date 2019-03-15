@@ -76,7 +76,7 @@ void LCView::load_portfolio_from_file() {
   if (p) {
     Portfolio *old_portfolio = portfolio_;
     portfolio_ = p;
-    filters_panel_->reset_view();
+    filters_panel_->reset_filters();
     refresh_charts(QList<Filter>());
     delete old_portfolio;
   } else {

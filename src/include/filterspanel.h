@@ -32,7 +32,7 @@ class FiltersPanel : public QWidget {
 public:
   explicit FiltersPanel(LCView* parent);
 
-  void reset_view();
+  void reset_filters();
 
 private:
   LCView *parent_;

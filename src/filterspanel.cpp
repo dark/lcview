@@ -52,9 +52,12 @@ FiltersPanel::FiltersPanel(LCView* parent)
 }
 
 
-void FiltersPanel::reset_view() {
-  for (auto element: filter_elements_)
-    element->reset_view();
+void FiltersPanel::reset_filters() {
+  for (auto element: filter_elements_) {
+    filters_row_->removeWidget(element);
+    delete element;
+  }
+  filter_elements_.clear();
 }
 
 
@@ -78,6 +81,6 @@ void FiltersPanel::on_apply_button_clicked() {
 
 
 void FiltersPanel::on_reset_button_clicked() {
-  reset_view();
+  reset_filters();
   parent_->on_filter_update(QList<Filter>());
 }
