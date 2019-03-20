@@ -1,5 +1,5 @@
 /*
- *  A better viewer for Lending Club notes
+ *  An offline viewer for Lending Club notes
  *  Copyright (C) 2019  Marco Leogrande
  *
  *  This program is free software: you can redistribute it and/or modify
