@@ -21,9 +21,10 @@
 
 #include <QHBoxLayout>
 #include <QToolButton>
+#include "include/filterspanel.h"
 
-
-FilterElement::FilterElement(): QFrame() {
+FilterElement::FilterElement(FiltersPanel *parent):
+  QFrame(), parent_(parent) {
   // Filter key
   filter_selector_ = new QComboBox;
   filter_selector_->insertItem(1, "(none)",
@@ -43,6 +44,7 @@ FilterElement::FilterElement(): QFrame() {
   QIcon close_icon(":/images/images/close.png");
   QToolButton *close_button = new QToolButton();
   close_button->setIcon(close_icon);
+  connect(close_button, SIGNAL(clicked()), this, SLOT(on_close_button_clicked()));
 
   // Layout for the element
   QHBoxLayout *layout = new QHBoxLayout();
@@ -85,6 +87,11 @@ void FilterElement::on_filter_selection_changed(int /* unused */) {
     filter_value_->set_active_filter(data.value<Attributes::NoteField>());
   else
     filter_value_->clear_active_filter();
+}
+
+
+void FilterElement::on_close_button_clicked() {
+  parent_->remove_element(this);
 }
 
 

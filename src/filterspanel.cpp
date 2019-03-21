@@ -54,6 +54,26 @@ FiltersPanel::FiltersPanel(LCView* parent)
 }
 
 
+void FiltersPanel::remove_element(FilterElement *filter) {
+  for (auto i = filter_elements_.begin(); i != filter_elements_.end(); ++i) {
+    if (*i == filter) {
+      // This is the filter we want to remove
+      filter_elements_.erase(i);
+      filters_row_->removeWidget(filter);
+      // This is needed because this function is likely called by a filter callback
+      filter->deleteLater();
+      break;
+    }
+  }
+
+  if (filter_elements_.isEmpty()) {
+    // That was the last filter
+    apply_button_->setEnabled(false);
+    reset_button_->setEnabled(false);
+  }
+}
+
+
 void FiltersPanel::reset_filters() {
   for (auto element: filter_elements_) {
     filters_row_->removeWidget(element);
@@ -68,7 +88,7 @@ void FiltersPanel::reset_filters() {
 
 void FiltersPanel::on_plus_button_clicked() {
   // Add new filter at the end of the other filters
-  FilterElement *filter_element = new FilterElement();
+  FilterElement *filter_element = new FilterElement(this);
   filter_elements_.append(filter_element);
   filters_row_->insertWidget(filter_elements_.size(), filter_element);
 

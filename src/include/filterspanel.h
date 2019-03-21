@@ -33,6 +33,7 @@ class FiltersPanel : public QWidget {
 public:
   explicit FiltersPanel(LCView* parent);
 
+  void remove_element(FilterElement* filter);
   void reset_filters();
 
 private:

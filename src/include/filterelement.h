@@ -25,22 +25,25 @@
 
 // fwd decls
 class FilterValueWidget;
+class FiltersPanel;
 
 class FilterElement : public QFrame {
   Q_OBJECT
 
 public:
-  FilterElement();
+  explicit FilterElement(FiltersPanel *parent);
 
   void reset_view();
 
   std::optional<Filter> get_filter();
 
 private:
+  FiltersPanel *parent_;
   // subcomponents and subwidgets
   QComboBox *filter_selector_;
   FilterValueWidget *filter_value_;
 
 private slots:
   void on_filter_selection_changed(int index);
+  void on_close_button_clicked();
 };
