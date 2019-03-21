@@ -22,7 +22,7 @@
 #include <QHBoxLayout>
 
 
-FilterElement::FilterElement() {
+FilterElement::FilterElement(): QFrame() {
   filter_selector_ = new QComboBox;
   filter_selector_->insertItem(1, "(none)",
                                QVariant());
@@ -43,6 +43,8 @@ FilterElement::FilterElement() {
   layout->addWidget(filter_value_);
 
   setLayout(layout);
+  setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+  setLineWidth(1);
 }
 
 

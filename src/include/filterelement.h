@@ -19,13 +19,14 @@
 #pragma once
 
 #include <QComboBox>
+#include <QFrame>
 #include <QWidget>
 #include "filter.h"
 
 // fwd decls
 class FilterValueWidget;
 
-class FilterElement : public QWidget {
+class FilterElement : public QFrame {
   Q_OBJECT
 
 public:
