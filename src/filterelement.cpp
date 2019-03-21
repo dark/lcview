@@ -20,9 +20,11 @@
 #include "include/filterelement-pvt.h"
 
 #include <QHBoxLayout>
+#include <QToolButton>
 
 
 FilterElement::FilterElement(): QFrame() {
+  // Filter key
   filter_selector_ = new QComboBox;
   filter_selector_->insertItem(1, "(none)",
                                QVariant());
@@ -34,13 +36,20 @@ FilterElement::FilterElement(): QFrame() {
                                QVariant::fromValue(Attributes::NoteField::STATUS));
   connect(filter_selector_, SIGNAL(activated(int)), this, SLOT(on_filter_selection_changed(int)));
 
+  // Context-dependent filter value
   filter_value_ = new FilterValueWidget;
+
+  // This is to remove the filter
+  QIcon close_icon(":/images/images/close.png");
+  QToolButton *close_button = new QToolButton();
+  close_button->setIcon(close_icon);
 
   // Layout for the element
   QHBoxLayout *layout = new QHBoxLayout();
   layout->setContentsMargins(0, 0, 0, 0);
   layout->addWidget(filter_selector_);
   layout->addWidget(filter_value_);
+  layout->addWidget(close_button);
 
   setLayout(layout);
   setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);

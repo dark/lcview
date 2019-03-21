@@ -63,7 +63,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     images/load.png \
-    images/help-about.png
+    images/help-about.png \
+    images/close.png
 
 RESOURCES += \
     resources.qrc
