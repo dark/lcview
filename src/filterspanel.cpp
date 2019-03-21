@@ -34,7 +34,7 @@ FiltersPanel::FiltersPanel(LCView* parent)
   QPushButton *plus_button = new QPushButton(tr("+"));
   plus_button->setFixedWidth(20);
   apply_button_ = new QPushButton(tr("Apply"));
-  apply_button_->setEnabled(false);
+  apply_button_->setEnabled(true);
   reset_button_ = new QPushButton(tr("Reset"));
   reset_button_->setEnabled(false);
   connect(plus_button, SIGNAL(clicked()), this, SLOT(on_plus_button_clicked()));
@@ -68,7 +68,6 @@ void FiltersPanel::remove_element(FilterElement *filter) {
 
   if (filter_elements_.isEmpty()) {
     // That was the last filter
-    apply_button_->setEnabled(false);
     reset_button_->setEnabled(false);
   }
 }
@@ -81,7 +80,6 @@ void FiltersPanel::reset_filters() {
   }
   filter_elements_.clear();
 
-  apply_button_->setEnabled(false);
   reset_button_->setEnabled(false);
 }
 
@@ -92,7 +90,6 @@ void FiltersPanel::on_plus_button_clicked() {
   filter_elements_.append(filter_element);
   filters_row_->insertWidget(filter_elements_.size(), filter_element);
 
-  apply_button_->setEnabled(true);
   reset_button_->setEnabled(true);
 }
 
