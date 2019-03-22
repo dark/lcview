@@ -10,7 +10,7 @@ This project aims at providing a richer set of statistics.
 To use `lcview`, you need to build it from the source
 code. Pre-compiled binaries are not provided at this time.
 
-### Dependencies
+### Install dependencies
 
 You need to install a compiler that supports `c++17`. Development was
 performed against `gcc-8.2.0`.
@@ -25,7 +25,7 @@ distribution. Please refer to the documentation of your distribution
 for more information.*
 
 
-### Build
+### Build from source
 
 ```
 git clone https://github.com/dark/lcview.git
