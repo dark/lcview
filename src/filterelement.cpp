@@ -19,7 +19,6 @@
 #include "include/filterelement.h"
 #include "include/filterelement-pvt.h"
 
-#include <QHBoxLayout>
 #include <QToolButton>
 #include "include/filterspanel.h"
 
@@ -37,8 +36,8 @@ FilterElement::FilterElement(FiltersPanel *parent):
                                QVariant::fromValue(Attributes::NoteField::STATUS));
   connect(filter_selector_, SIGNAL(activated(int)), this, SLOT(on_filter_selection_changed(int)));
 
-  // Context-dependent filter value
-  filter_value_ = new FilterValueWidget;
+  // Context-dependent filter value (initially empty)
+  filter_value_ = nullptr;
 
   // This is to remove the filter
   QIcon close_icon(":/images/images/close.png");
@@ -47,13 +46,12 @@ FilterElement::FilterElement(FiltersPanel *parent):
   connect(close_button, SIGNAL(clicked()), this, SLOT(on_close_button_clicked()));
 
   // Layout for the element
-  QHBoxLayout *layout = new QHBoxLayout();
-  layout->setContentsMargins(0, 0, 0, 0);
-  layout->addWidget(filter_selector_);
-  layout->addWidget(filter_value_);
-  layout->addWidget(close_button);
+  layout_ = new QHBoxLayout();
+  layout_->setContentsMargins(0, 0, 0, 0);
+  layout_->addWidget(filter_selector_);
+  layout_->addWidget(close_button);
 
-  setLayout(layout);
+  setLayout(layout_);
   setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
   setLineWidth(1);
 }
@@ -61,7 +59,7 @@ FilterElement::FilterElement(FiltersPanel *parent):
 
 void FilterElement::reset_view() {
   filter_selector_->setCurrentIndex(0);
-  filter_value_->clear_active_filter();
+  ensure_filter_value_deleted();
 }
 
 
@@ -71,22 +69,50 @@ std::optional<Filter> FilterElement::get_filter() {
   if (!data.isValid())
     return {};
 
+  if (!filter_value_) {
+    qCritical("Filter value is null even though the filter selector is valid");
+    return {};
+  }
+
   Attributes::NoteField field = data.value<Attributes::NoteField>();
   return filter_value_->get_filter(field);
 }
 
 
+void FilterElement::ensure_filter_value_deleted() {
+  if (filter_value_) {
+    // Remove from view
+    filter_value_->clear_active_filter();
+    layout_->removeWidget(filter_value_);
+
+    // Destroy
+    delete filter_value_;
+    filter_value_ = nullptr;
+  }
+}
+
+
+void FilterElement::ensure_filter_value_exists() {
+  if (!filter_value_) {
+    filter_value_ = new FilterValueWidget();
+    layout_->insertWidget(1, filter_value_);
+  }
+}
+
+
 void FilterElement::on_filter_selection_changed(int /* unused */) {
-  if (!filter_selector_ || !filter_value_) {
+  if (!filter_selector_) {
     qCritical("Filter selection changed while the UI is not setup");
     return;
   }
 
   QVariant data = filter_selector_->currentData();
-  if (data.isValid())
+  if (data.isValid()) {
+    ensure_filter_value_exists();
     filter_value_->set_active_filter(data.value<Attributes::NoteField>());
-  else
-    filter_value_->clear_active_filter();
+  } else {
+    ensure_filter_value_deleted();
+  }
 }
 
 

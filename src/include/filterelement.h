@@ -20,6 +20,7 @@
 
 #include <QComboBox>
 #include <QFrame>
+#include <QHBoxLayout>
 #include <QWidget>
 #include "filter.h"
 
@@ -40,8 +41,12 @@ public:
 private:
   FiltersPanel *parent_;
   // subcomponents and subwidgets
+  QHBoxLayout *layout_;
   QComboBox *filter_selector_;
   FilterValueWidget *filter_value_;
+
+  void ensure_filter_value_deleted();
+  void ensure_filter_value_exists();
 
 private slots:
   void on_filter_selection_changed(int index);
