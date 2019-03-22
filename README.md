@@ -40,5 +40,20 @@ Run `./lcview` to start the application.
 
 ## Usage
 
+To display notes statistics, you need to download on your computer a
+CSV file with all notes information.
+
+After logging into your LendingClub account, click on "Holding", then
+"Notes":
+
 ![Step 1](docs/images/usage-step-1.png)
+
+
+Then proceed at the bottom of the page; under the pagination widget
+there is a link "Download All - Extended".
+
 ![Step 2](docs/images/usage-step-2.png)
+
+
+Click on this link to save the CSV file locally. You should load this
+file in `lcview` to display statistics.
