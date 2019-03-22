@@ -1,4 +1,4 @@
-# LCview: An offline viewer for Lending Club notes statistics
+# LCview: An offline viewer for LendingClub notes statistics
 
 LendingClub provides some features to display notes statistics on its
 website, but the filter and display capabilities are quite limited.
