@@ -12,7 +12,7 @@ code. Pre-compiled binaries are not provided at this time.
 
 ### Dependencies
 
-You need to install a compiler that supports c++17. Development was
+You need to install a compiler that supports `c++17`. Development was
 performed against `gcc-8.2.0`.
 
 You need the development version of the QT libraries. If you are not
@@ -20,8 +20,9 @@ using a monolithic package, you should install at least these
 components: `qt-charts`, `qt-core`, `qt-gui`and
 `qt-widgets`. Development was performed against QT version `5.11.x`.
 
-*The exact commands to be used depend your Linux distribution. Please
-refer to the documentation of your distribution for more information.*
+*The exact commands to be used depend on your Linux
+distribution. Please refer to the documentation of your distribution
+for more information.*
 
 
 ### Build
