@@ -193,8 +193,8 @@ void FilterValueWidget::remove_filter_widget() {
 
 
 TermSelectorComponent::TermSelectorComponent() {
-  term_36_checkbox_ = new QCheckBox("36 months");
-  term_60_checkbox_ = new QCheckBox("60 months");
+  term_36_checkbox_ = new QCheckBox("36 mo");
+  term_60_checkbox_ = new QCheckBox("60 mo");
 
   // Add wrapper layout to put everything together
   QHBoxLayout *mainLayout = new QHBoxLayout();
