@@ -3,7 +3,12 @@
 LendingClub provides some features to display notes statistics on its
 website, but the filter and display capabilities are quite limited.
 
-This project aims at providing a richer set of statistics.
+This project aims at building a desktop application that can provide a
+richer set of statistics, while still allowing filtering of notes.
+
+For example:
+
+![Example](docs/images/summary-example.png)
 
 ## Installation
 
